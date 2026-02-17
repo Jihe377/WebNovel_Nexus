@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+public/lib/
+
+# Cache directories
+.cache/
+.eslintcache
+.npm/
+
+# Environment files
+.env*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Database files
+*.db
+*.sqlite
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Version control
+.git/
+.gitignore
+
+# Documentation that should stay as-is
+README.md
+CHANGELOG.md
+LICENSE
+
+# Configuration files (usually don't need formatting)
+*.json
+!package.json
+
+# Minified files
+*.min.js
+*.min.css
+
+# Vendor libraries
+public/vendor/
+lib/
+libs/
+
+# Generated files
+coverage/
