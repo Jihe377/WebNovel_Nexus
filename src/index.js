@@ -8,7 +8,6 @@ import reviewRouter from "./routes/reviewRouter.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 解决 ES Module 中 __dirname 不可用的问题
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -16,10 +15,15 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// 根路径重定向到 homepage（必须在 static 之前，否则会被 index.html 拦截）
+app.get("/", (req, res) => {
+  res.redirect("/homepage.html");
+});
+
 // 托管 frontend 静态文件
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// 测试路由
+// 健康检查
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Homepage | WebNovel_Nexus</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+
+  <style>
+    :root { --nn-primary: #0d6cf2; }
+
+    nav.nn-navbar {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.85);
+    }
+    [data-bs-theme="dark"] nav.nn-navbar {
+      background: rgba(16, 25, 34, 0.88);
+    }
+
+    /* Hero banner */
+    .nn-hero {
+      background: linear-gradient(135deg, #0d6cf2 0%, #6610f2 100%);
+      color: #fff;
+      padding: 3.5rem 0 3rem;
+    }
+    [data-bs-theme="dark"] .nn-hero {
+      background: linear-gradient(135deg, #0a4db5 0%, #4a0db5 100%);
+    }
+
+    /* Genre section header accent */
+    .nn-genre-title {
+      border-left: 4px solid var(--nn-primary);
+      padding-left: .75rem;
+    }
+
+    /* Rank badge */
+    .nn-rank {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      font-size: .75rem;
+      font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .nn-rank-1 { background: #ffd700; color: #333; }
+    .nn-rank-2 { background: #c0c0c0; color: #333; }
+    .nn-rank-3 { background: #cd7f32; color: #fff; }
+    .nn-rank-other { background: var(--bs-secondary-bg); color: var(--bs-body-color); }
+
+    /* Book list item */
+    .nn-book-item {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6rem .75rem;
+      border-radius: .5rem;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .nn-book-item:hover { background: var(--bs-tertiary-bg); }
+
+    /* Cover thumbnail */
+    .nn-thumb {
+      width: 44px; height: 62px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background: var(--bs-secondary-bg);
+    }
+    .nn-thumb-placeholder {
+      width: 44px; height: 62px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bs-secondary-bg);
+    }
+
+    /* Read count pill */
+    .nn-reads {
+      font-size: .7rem;
+      white-space: nowrap;
+    }
+
+    /* Shimmer skeleton */
+    .nn-shimmer {
+      background: linear-gradient(90deg,
+        var(--bs-secondary-bg) 25%, var(--bs-tertiary-bg) 50%, var(--bs-secondary-bg) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: .375rem;
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to   { background-position: -200% 0; }
+    }
+
+    /* Genre card */
+    .nn-genre-card { border-radius: .75rem; }
+
+    /* Sticky nav offset */
+    .nn-section { scroll-margin-top: 76px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR (same as index.html) ═══════════════ -->
+<nav class="nn-navbar navbar navbar-expand-md sticky-top border-bottom shadow-sm">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <span class="bg-primary text-white rounded-2 p-1 d-inline-flex align-items-center">
+        <span class="material-symbols-outlined" style="font-size:20px">book_4</span>
+      </span>
+      WebNovel_Nexus
+    </a>
+
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto gap-md-1 mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">
+            <span class="material-symbols-outlined align-middle" style="font-size:16px">explore</span>
+            Discover
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="add.html">
+            <span class="material-symbols-outlined align-middle" style="font-size:16px">add_circle</span>
+            Add Novel
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="novel.html">
+            <span class="material-symbols-outlined align-middle" style="font-size:16px">menu_book</span>
+            Novel Detail
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="booklist.html">
+            <span class="material-symbols-outlined align-middle" style="font-size:16px">bookmarks</span>
+            My Booklist
+          </a>
+        </li>
+      </ul>
+      <div class="d-flex gap-2 align-items-center mt-2 mt-md-0">
+        <button class="btn btn-sm btn-outline-secondary" id="themeToggle" title="Toggle theme">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px" id="themeIcon">dark_mode</span>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px">notifications</span>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px">account_circle</span>
+          My Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="nn-hero">
+  <div class="container-xl text-center">
+    <h1 class="fw-bold display-5 mb-2">📚 Genre Charts</h1>
+    <p class="mb-4 opacity-75">Top 5 most-read novels in each genre — updated in real time.</p>
+    <!-- Genre quick-nav pills (populated by JS) -->
+    <div class="d-flex flex-wrap justify-content-center gap-2" id="genreNav"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="container-xl py-5">
+
+  <!-- Genre leaderboard grid — populated by JS -->
+  <div class="row g-4" id="chartsGrid"></div>
+
+  <!-- Global error / empty state -->
+  <div class="text-center py-5 d-none" id="globalError">
+    <span class="material-symbols-outlined d-block mb-2" style="font-size:48px;opacity:.35">error</span>
+    <h5 class="fw-bold">Failed to load charts</h5>
+    <small class="text-muted">Please check your connection or server status.</small><br>
+    <button onclick="loadCharts()" class="btn btn-primary btn-sm mt-3">Retry</button>
+  </div>
+
+</main>
+
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="border-top bg-body-tertiary mt-5 py-4">
+  <div class="container-xl text-center">
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+      <span class="bg-primary bg-opacity-25 text-primary rounded p-1 d-inline-flex">
+        <span class="material-symbols-outlined" style="font-size:18px">book_4</span>
+      </span>
+      <span class="fw-bold">NovelNest</span>
+    </div>
+    <p class="text-muted small mb-3">Explore thousands of worlds, one chapter at a time.</p>
+    <div class="d-flex justify-content-center gap-4 mb-3">
+      <a href="#" class="text-muted small text-decoration-none">Terms of Service</a>
+      <a href="#" class="text-muted small text-decoration-none">Privacy Policy</a>
+      <a href="#" class="text-muted small text-decoration-none">Contact Us</a>
+    </div>
+    <p class="text-muted" style="font-size:.75rem">© 2024 NovelNest. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Toast container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════ */
+const API_BASE = '/api';
+
+// Accent colours cycled per genre card
+const CARD_ACCENTS = [
+  '#0d6cf2','#6610f2','#d63384','#fd7e14',
+  '#20c997','#0dcaf0','#ffc107','#198754',
+  '#dc3545','#6f42c1',
+];
+
+// Genre icon map (Material Symbols)
+const GENRE_ICONS = {
+  Fantasy:    'auto_fix_high',
+  'Sci-Fi':   'rocket_launch',
+  Romance:    'favorite',
+  Mystery:    'search',
+  Horror:     'skull',
+  Action:     'local_fire_department',
+  Historical: 'history_edu',
+  Thriller:   'psychology_alt',
+  Adventure:  'hiking',
+  Comedy:     'sentiment_very_satisfied',
+};
+const DEFAULT_ICON = 'menu_book';
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  restoreTheme();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  loadCharts();
+});
+
+/* ═══════════════════════════════════════
+   LOAD CHARTS
+   Strategy: fetch all novels (large limit),
+   group by genre client-side, sort by read desc,
+   take top 5 per genre, render top 10 genres.
+═══════════════════════════════════════ */
+async function loadCharts() {
+  document.getElementById('globalError').classList.add('d-none');
+  document.getElementById('chartsGrid').innerHTML = '';
+  showSkeletons(10);
+
+  try {
+    // Fetch up to 1000 novels — adjust if your DB is larger
+    const res = await fetch(`${API_BASE}/novels?limit=1000&page=1`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const novels = data.novels || [];
+
+    // Group by genre
+    const genreMap = {};
+    novels.forEach(n => {
+      const g = (n.genre || 'Unknown').trim();
+      if (!genreMap[g]) genreMap[g] = [];
+      genreMap[g].push(n);
+    });
+
+    // Sort each genre by read count desc, keep top 5
+    // Then pick top 10 genres by total reads
+    const genreList = Object.entries(genreMap)
+      .map(([genre, list]) => {
+        const sorted = list.sort((a, b) => (b.read || 0) - (a.read || 0));
+        const totalReads = sorted.reduce((s, n) => s + (n.read || 0), 0);
+        return { genre, books: sorted.slice(0, 5), totalReads };
+      })
+      .sort((a, b) => b.totalReads - a.totalReads)
+      .slice(0, 10);
+
+    if (genreList.length === 0) {
+      document.getElementById('chartsGrid').innerHTML = `
+        <div class="col-12 text-center py-5 text-muted">
+          <span class="material-symbols-outlined d-block mb-2" style="font-size:48px;opacity:.4">library_books</span>
+          <h6 class="fw-bold">No novels found</h6>
+          <small>Add some novels first to see genre charts.</small>
+        </div>`;
+      document.getElementById('genreNav').innerHTML = '';
+      return;
+    }
+
+    renderGenreNav(genreList);
+    renderCharts(genreList);
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('chartsGrid').innerHTML = '';
+    document.getElementById('globalError').classList.remove('d-none');
+  }
+}
+
+/* ═══════════════════════════════════════
+   SKELETON PLACEHOLDERS
+═══════════════════════════════════════ */
+function showSkeletons(n) {
+  document.getElementById('chartsGrid').innerHTML =
+    Array.from({ length: n }).map(() => `
+      <div class="col-md-6 col-xl-4">
+        <div class="card nn-genre-card shadow-sm h-100">
+          <div class="card-header py-3">
+            <div class="nn-shimmer rounded" style="height:18px;width:55%"></div>
+          </div>
+          <div class="card-body p-3">
+            ${Array.from({length:5}).map(() => `
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="nn-shimmer rounded-circle" style="width:28px;height:28px;flex-shrink:0"></div>
+                <div class="nn-shimmer rounded" style="width:44px;height:62px;flex-shrink:0"></div>
+                <div class="flex-grow-1">
+                  <div class="nn-shimmer rounded mb-2" style="height:13px;width:80%"></div>
+                  <div class="nn-shimmer rounded" style="height:11px;width:50%"></div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>`).join('');
+}
+
+/* ═══════════════════════════════════════
+   GENRE QUICK-NAV (hero pills)
+═══════════════════════════════════════ */
+function renderGenreNav(genreList) {
+  const nav = document.getElementById('genreNav');
+  nav.innerHTML = '';
+  genreList.forEach(({ genre }, i) => {
+    const id = slugify(genre);
+    const color = CARD_ACCENTS[i % CARD_ACCENTS.length];
+    nav.insertAdjacentHTML('beforeend', `
+      <a href="#${id}" class="badge text-decoration-none py-2 px-3"
+         style="background:rgba(255,255,255,.2);color:#fff;font-size:.8rem;border-radius:999px;
+                backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3)"
+         onmouseover="this.style.background='${color}';this.style.borderColor='${color}'"
+         onmouseout="this.style.background='rgba(255,255,255,.2)';this.style.borderColor='rgba(255,255,255,.3)'">
+        <span class="material-symbols-outlined align-middle me-1" style="font-size:14px">
+          ${GENRE_ICONS[genre] || DEFAULT_ICON}
+        </span>${esc(genre)}
+      </a>`);
+  });
+}
+
+/* ═══════════════════════════════════════
+   RENDER GENRE CHART CARDS
+═══════════════════════════════════════ */
+function renderCharts(genreList) {
+  const grid = document.getElementById('chartsGrid');
+  grid.innerHTML = '';
+
+  genreList.forEach(({ genre, books, totalReads }, gi) => {
+    const accent = CARD_ACCENTS[gi % CARD_ACCENTS.length];
+    const id     = slugify(genre);
+    const icon   = GENRE_ICONS[genre] || DEFAULT_ICON;
+
+    const booksHtml = books.length === 0
+      ? `<p class="text-muted small text-center py-3">No novels yet</p>`
+      : books.map((novel, rank) => {
+          const rankCls = rank === 0 ? 'nn-rank-1'
+                        : rank === 1 ? 'nn-rank-2'
+                        : rank === 2 ? 'nn-rank-3'
+                        : 'nn-rank-other';
+          const thumb = novel.coverUrl
+            ? `<img src="${esc(novel.coverUrl)}" class="nn-thumb" alt="${esc(novel.name)}"
+                    onerror="this.outerHTML='<div class=\\'nn-thumb-placeholder\\'><span class=\\'material-symbols-outlined text-secondary\\' style=\\'font-size:20px\\'>auto_stories</span></div>'">`
+            : `<div class="nn-thumb-placeholder">
+                 <span class="material-symbols-outlined text-secondary" style="font-size:20px">auto_stories</span>
+               </div>`;
+
+          return `
+            <div class="nn-book-item" onclick="goToNovel('${novel._id}')">
+              <span class="nn-rank ${rankCls}">${rank + 1}</span>
+              ${thumb}
+              <div class="flex-grow-1 overflow-hidden">
+                <div class="fw-semibold small text-truncate" title="${esc(novel.name)}">${esc(novel.name)}</div>
+                <div class="text-muted" style="font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                  ${esc(novel.author)}
+                </div>
+                <div class="d-flex align-items-center gap-1 mt-1 nn-reads text-muted">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span>
+                  ${fmtNum(novel.read || 0)} reads
+                </div>
+              </div>
+              ${rank === 0
+                ? `<span class="material-symbols-outlined" style="font-size:20px;color:#ffd700">emoji_events</span>`
+                : ''}
+            </div>`;
+        }).join('<hr class="my-1 opacity-10">');
+
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="col-md-6 col-xl-4 nn-section" id="${id}">
+        <div class="card nn-genre-card shadow-sm h-100">
+          <div class="card-header d-flex align-items-center justify-content-between py-3"
+               style="border-bottom:3px solid ${accent}">
+            <div class="d-flex align-items-center gap-2">
+              <span class="rounded-2 p-1 d-inline-flex" style="background:${accent}20">
+                <span class="material-symbols-outlined" style="font-size:20px;color:${accent}">${icon}</span>
+              </span>
+              <span class="fw-bold">${esc(genre)}</span>
+            </div>
+            <span class="badge rounded-pill text-muted" style="background:var(--bs-secondary-bg);font-size:.7rem">
+              ${fmtNum(totalReads)} total reads
+            </span>
+          </div>
+          <div class="card-body p-2">
+            ${booksHtml}
+          </div>
+          <div class="card-footer text-end py-2">
+            <a href="index.html?genre=${encodeURIComponent(genre)}"
+               class="btn btn-sm" style="color:${accent};font-size:.78rem">
+              View all ${esc(genre)} novels
+              <span class="material-symbols-outlined align-middle" style="font-size:14px">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </div>`);
+  });
+}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function goToNovel(id) { window.location.href = `novel.html?id=${id}`; }
+
+function fmtNum(n) {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1_000)     return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+  return String(n);
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ═══════════════════════════════════════
+   THEME (same logic as index.html)
+═══════════════════════════════════════ */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-bs-theme') === 'dark';
+  html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').textContent = isDark ? 'dark_mode' : 'light_mode';
+  localStorage.setItem('nn-theme', isDark ? 'light' : 'dark');
+}
+
+function restoreTheme() {
+  const saved = localStorage.getItem('nn-theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-bs-theme', saved);
+    const icon = document.getElementById('themeIcon');
+    if (icon) icon.textContent = saved === 'dark' ? 'light_mode' : 'dark_mode';
+  }
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function showToast(msg, type = 'success') {
+  const bg = {success:'text-bg-success',warning:'text-bg-warning',danger:'text-bg-danger'}[type]||'text-bg-dark';
+  const id = `toast-${Date.now()}`;
+  document.getElementById('toastContainer').insertAdjacentHTML('beforeend', `
+    <div id="${id}" class="toast align-items-center ${bg} border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body fw-semibold">${esc(msg)}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>`);
+  const el = document.getElementById(id);
+  new bootstrap.Toast(el, { delay: 3000 }).show();
+  el.addEventListener('hidden.bs.toast', () => el.remove());
+}
+</script>
+</body>
+</html>
