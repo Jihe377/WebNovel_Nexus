@@ -2,9 +2,9 @@
   "name": "webnovel_nexus",
   "version": "1.0.0",
   "description": "",
-  "main": "backend.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./node_modules/nodemon/bin/nodemon.js backend.js",
+    "start": "node ./node_modules/nodemon/bin/nodemon.js src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
