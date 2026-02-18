@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./src/mongodb-connect.js";
+import novelRouter from "./src/routes/novelRouter.js";
+import reviewRouter from "./src/routes/reviewRouter.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +23,9 @@ app.use(express.static(path.join(__dirname, "frontend")));
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
+
+app.use("/api/novels", novelRouter);
+app.use("/api", reviewRouter);
 
 // 启动服务器
 const { novelCol, reviewCol } = await connectDB();
