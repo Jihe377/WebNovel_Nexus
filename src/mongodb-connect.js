@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const URI = process.env.MONGO_URI;
-const DB_NAME = process.env.DB_NAME || "Novels";
+const DB_NAME = process.env.DB_NAME || "novel_db";
 
 if (!URI) {
   console.error("Missing MONGO_URI environment variable");
@@ -19,11 +19,11 @@ async function connectDB() {
 
     const db = client.db(DB_NAME);
     const novelCol = db.collection("NOVEL");
-    const tagCol = db.collection("TAG");
+    const reviewCol = db.collection("REVIEW");
 
-    console.log("Collections ready: NOVEL, TAG");
+    console.log("Collections ready: NOVEL, REVIEW");
 
-    return { novelCol, tagCol };
+    return { novelCol, reviewCol };
   } catch (err) {
     console.error("Failed to connect:", err);
     process.exit(1);

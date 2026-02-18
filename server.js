@@ -23,10 +23,10 @@ app.get("/api/health", (req, res) => {
 });
 
 // 启动服务器
-const { novelCol, tagCol } = await connectDB();
+const { novelCol, reviewCol } = await connectDB();
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
-export { novelCol, tagCol };
+export { novelCol, reviewCol };
