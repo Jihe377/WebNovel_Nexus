@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ObjectId } from "mongodb";
-import connectDB from "../mongodb-connect.js";
+import connectDB from "../modules/mongodb-connect.js";
 // import { getRecommendations } from "../recommender.js";
 
 const router = Router();
