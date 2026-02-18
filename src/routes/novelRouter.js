@@ -117,6 +117,16 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Maximum 3 tags allowed" });
     }
 
+    // Check for repeat 
+    const existing = await novelCol.findOne({
+      name: { $regex: `^${name.trim()}$`, $options: "i" }, 
+      author: { $regex: `^${author.trim()}$`, $options: "i" }
+    });
+
+    if (existing) {
+      return res.status(409).json({ error: "This novel already exists in the database" });
+    }
+
     // Status: default to Ongoing
     const validStatuses = ["Ongoing", "Completed", "Hiatus"];
     const novelStatus = validStatuses.includes(status) ? status : "Ongoing";
