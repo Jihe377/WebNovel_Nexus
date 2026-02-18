@@ -1,9 +1,9 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import connectDB from "./src/mongodb-connect.js";
-import novelRouter from "./src/routes/novelRouter.js";
-import reviewRouter from "./src/routes/reviewRouter.js";
+import connectDB from "./modules/mongodb-connect.js";
+import novelRouter from "./routes/novelRouter.js";
+import reviewRouter from "./routes/reviewRouter.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
