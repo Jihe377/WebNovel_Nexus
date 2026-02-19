@@ -23,11 +23,12 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// 连接数据库
 connectDB();
 
 app.use("/api/novels", novelRouter);
 app.use("/api", reviewRouter);
 
-// 直接导出 app，Vercel 会将其识别为 server
+// Vercel 需要具名导出 handler
+export const handler = (req, res) => app(req, res);
+
 export default app;
