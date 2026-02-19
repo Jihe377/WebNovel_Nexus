@@ -12,9 +12,10 @@ Currently, the landscape of internet novels (web fiction, serialized online stor
  - Add booklist: I can add novels to my bookshelf
 
 ### Technical Stack
- - **Frontend:** Bootstrap, HTML
+ - **Frontend:** Bootstrap, HTML, CSS
  - **Backend:** Node.js, Express
  - **Database:** MongoDB
+ - **Deploy:** Render
 
 ### Database Schema
 **Database**: 'novel_db'\
