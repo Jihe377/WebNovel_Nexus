@@ -274,13 +274,14 @@ function renderNovel(n) {
   // Status badge
   const statusEl = document.getElementById('novelStatus');
   const statusMap = {
-    'Completed': 'bg-success',
-    'Ongoing':   'bg-warning text-dark',
-    'Hiatus':    'bg-secondary',
+    'completed': 'bg-success',
+    'ongoing':   'bg-warning text-dark',
+    'hiatus':    'bg-secondary',
   };
   if (n.status) {
+    const key = n.status.toLowerCase();
     statusEl.textContent = n.status;
-    statusEl.className = `badge ${statusMap[n.status] || 'bg-secondary'}`;
+    statusEl.className = `badge ${statusMap[key] || 'bg-secondary'}`;
   }
   document.getElementById('novelAuthor').textContent = n.author || 'Unknown Author';
   document.getElementById('novelDesc').textContent = n.description || n.desc || 'No synopsis available.';
