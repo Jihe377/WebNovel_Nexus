@@ -28,7 +28,7 @@ connectDB();
 app.use("/api/novels", novelRouter);
 app.use("/api", reviewRouter);
 
-// Vercel 需要具名导出 handler
-export const handler = (req, res) => app(req, res);
-
-export default app;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
