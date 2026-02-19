@@ -583,9 +583,9 @@ function renderNovels(novels) {
             <div class="d-flex flex-wrap gap-1 mb-2">${tagsHtml}</div>
             <div class="mt-auto pt-2">
               <button class="btn btn-primary btn-sm d-flex align-items-center gap-1 flex-shrink-0"
-                onclick="event.stopPropagation(); addToBookshelf('${navId}', '${esc(novel.book_name)}')">
+                onclick="event.stopPropagation(); addToBooklist('${navId}', '${esc(novel.book_name)}')">
                 <span class="material-symbols-outlined" style="font-size:15px">library_add</span>
-                Add to Bookshelf
+                Add to Booklist
               </button>
             </div>
 
@@ -666,15 +666,15 @@ function updateResultsInfo(shown, total) {
 ═══════════════════════════════════════ */
 function goToNovel(id) { window.location.href = `novel.html?id=${id}`; }
 
-function addToBookshelf(id, name) {
+function addToBooklist(id, name) {
   // Visual-only per design spec (Story 6) — persisted in localStorage
-  const shelf = JSON.parse(localStorage.getItem('bookshelf') || '[]');
+  const shelf = JSON.parse(localStorage.getItem('booklist') || '[]');
   if (!shelf.includes(id)) {
     shelf.push(id);
-    localStorage.setItem('bookshelf', JSON.stringify(shelf));
-    showToast(`"${name}" added to your bookshelf!`, 'success');
+    localStorage.setItem('booklist', JSON.stringify(shelf));
+    showToast(`"${name}" added to your booklist!`, 'success');
   } else {
-    showToast('Already on your bookshelf', 'warning');
+    showToast('Already on your booklist', 'warning');
   }
 }
 
