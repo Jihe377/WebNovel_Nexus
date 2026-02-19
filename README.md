@@ -5,6 +5,7 @@ A centralized web application for tracking, discovering, and reviewing internet 
 **Live Demo:** [https://webnovel-nexus.onrender.com](https://webnovel-nexus.onrender.com)\
 **Class Link** [Course Detail](https://johnguerra.co/classes/webDevelopment_online_spring_2026/)\
 **YouTube Link** [Introduction Video](https://youtu.be/kN3GpWVhOtU)
+**Project Slides** [Google Slides](https://docs.google.com/presentation/d/17n2n2Fs7P4QN3KudjitoahG1MtaPAqXqLRQ-aw5qpS4/edit?usp=sharing)
 
 ---
 
