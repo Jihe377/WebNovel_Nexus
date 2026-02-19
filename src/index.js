@@ -35,3 +35,4 @@ app.use("/api", reviewRouter);
 
 // 删掉 app.listen，改成 export default
 export default app;
+export { novelCol, reviewCol };
