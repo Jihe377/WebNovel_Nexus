@@ -1,7 +1,5 @@
 # WebNovel Nexus
 
-## Danyan Gu & Xing Zhou
-
 A centralized web application for tracking, discovering, and reviewing internet novels (web fiction, serialized stories, fanfiction) across platforms like Royal Road, Wattpad, AO3, and more.
 
 **Live Demo:** [https://webnovel-nexus.onrender.com](https://webnovel-nexus.onrender.com)\
@@ -32,6 +30,18 @@ A centralized web application for tracking, discovering, and reviewing internet 
 | Deployment | Render |
 
 ---
+
+## Design Mockup
+<img width="2772" height="2404" alt="image" src="https://github.com/user-attachments/assets/c8c3978c-64fe-400e-83ac-3d2154a88c2b" />
+
+## Screenshot
+
+<img width="2578" height="1990" alt="image" src="https://github.com/user-attachments/assets/d385db34-33ad-405c-94b6-3f4be18371e3" />
+<img width="2576" height="1992" alt="image" src="https://github.com/user-attachments/assets/097483f8-33fd-4373-8218-09e79470ca0f" />
+<img width="2576" height="1994" alt="image" src="https://github.com/user-attachments/assets/3c9e21a9-208b-4f3b-97b3-4dd9f5070b23" />
+<img width="2580" height="1986" alt="image" src="https://github.com/user-attachments/assets/f6823a0c-0747-405d-9391-5ff93441f3ca" />
+<img width="2576" height="1986" alt="image" src="https://github.com/user-attachments/assets/587ed107-ddbd-4fcd-ba1d-79503bfce6ba" />
+
 
 ## Project Structure
 
