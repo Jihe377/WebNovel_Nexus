@@ -2,6 +2,14 @@
 ## 1. Project Description 
 Currently, the landscape of internet novels (web fiction, serialized online stories, fanfiction) is highly fragmented. Readers consume content across dozens of disparate platforms like Royal Road, Wattpad, AO3, Scribble Hub, and various translation sites. To create a centralized web application that acts as a universal "bookshelf" for internet novels. It will allow users to track what they read regardless of source, gauge community sentiment through ratings, and discover new content through personalized recommendation algorithms. 
 
+### Core Features
+ - Browse Novels: A homepage to browse all novels by category
+ - Novel Rank: Ranked category by readings
+ - Novel detail: A novel detail page, where I can see the name, author, category, tags and status of the novels
+ - Recommendation: Based on the novel I selected, I can recommend novels for myself
+ - Tag selection: I can search novels by category and tags
+ - Add Novel: I can add my own novel source
+
 ### Technical Stack
  - **Frontend:** Bootstrap, HTML
  - **Backend:** Node.js, Express
@@ -42,14 +50,6 @@ Stores user reviews and ratings for novels.
 | `rating` | Number | Star rating (1-5 scale) |
 | `body` | String | Review text content |
 | `createdAt` | String | Review date (MM/DD/YYYY format) |
-
-### Core Features
- - Browse Novels: A homepage to browse all novels by category
- - Novel Rank: Ranked category by readings
- - Novel detail: A novel detail page, where I can see the name, author, category, tags and status of the novels
- - Recommendation: Based on the novel I selected, I can recommend novels for myself
- - Tag selection: I can search novels by category and tags
- - Add Novel: I can add my own novel source
 
 ## 2. User Personas
 
