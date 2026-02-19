@@ -6,30 +6,16 @@ import { getRecommendations } from "../modules/recommender.js";
 const router = Router();
 
 // GET /api/novels
-// Supports ?search=, ?tags=, ?exclude=, ?page=, ?limit=
+// Supports ?search=, ?page=, ?limit=
 router.get("/", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
-    const { search, tags, exclude, page = 1, limit = 20 } = req.query;
+    const { search, page = 1, limit = 20 } = req.query;
 
     const query = {};
 
     if (search && search.trim()) {
-      query.name = { $regex: search.trim(), $options: "i" };
-    }
-
-    if (tags && tags.trim()) {
-      const includeTags = tags.split(",").map((t) => t.trim()).filter(Boolean);
-      if (includeTags.length > 0) {
-        query.tags = { $all: includeTags };
-      }
-    }
-
-    if (exclude && exclude.trim()) {
-      const excludeTags = exclude.split(",").map((t) => t.trim()).filter(Boolean);
-      if (excludeTags.length > 0) {
-        query.tags = { ...(query.tags || {}), $nin: excludeTags };
-      }
+      query.book_name = { $regex: search.trim(), $options: "i" };
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -103,52 +89,59 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
-    const { name, author, genre, source, description, tags, coverUrl, status } = req.body;
+    const {
+      id,
+      book_name, author, description, status, genre,
+      tag1, tag2, tag3,
+      source_url,
+      read,
+    } = req.body;
 
-    if (!name || !name.trim())
-      return res.status(400).json({ error: "Title is required" });
+    // Required field validation
+    if (!book_name || !book_name.trim())
+      return res.status(400).json({ error: "Book name is required" });
     if (!author || !author.trim())
       return res.status(400).json({ error: "Author is required" });
-    if (!genre || !genre.trim())
-      return res.status(400).json({ error: "Genre is required" });
-    if (!source || !source.trim())
-      return res.status(400).json({ error: "Source URL is required" });
     if (!description || !description.trim())
       return res.status(400).json({ error: "Description is required" });
+    if (!genre || !genre.trim())
+      return res.status(400).json({ error: "Genre is required" });
+    if (!source_url || !source_url.trim())
+      return res.status(400).json({ error: "Source URL is required" });
 
-    const parsedTags = Array.isArray(tags)
-      ? tags.map((t) => t.trim()).filter(Boolean)
-      : typeof tags === "string"
-        ? tags.split(",").map((t) => t.trim()).filter(Boolean)
-        : [];
-
-    if (parsedTags.length > 3) {
-      return res.status(400).json({ error: "Maximum 3 tags allowed" });
-    }
-
+    // Duplicate check
     const existing = await novelCol.findOne({
-      name: { $regex: `^${name.trim()}$`, $options: "i" },
-      author: { $regex: `^${author.trim()}$`, $options: "i" },
+      book_name: { $regex: `^${book_name.trim()}$`, $options: "i" },
+      author:    { $regex: `^${author.trim()}$`,    $options: "i" },
     });
-
     if (existing) {
       return res.status(409).json({ error: "This novel already exists in the database" });
     }
 
+    // Status validation
     const validStatuses = ["Ongoing", "Completed", "Hiatus"];
     const novelStatus = validStatuses.includes(status) ? status : "Ongoing";
 
+    // Determine next id if not provided
+    let novelId = parseInt(id);
+    if (isNaN(novelId)) {
+      const last = await novelCol.find({}).sort({ id: -1 }).limit(1).toArray();
+      novelId = last.length > 0 ? (last[0].id || 0) + 1 : 1;
+    }
+
     const newNovel = {
-      name: name.trim(),
-      author: author.trim(),
-      genre: genre.trim(),
-      source: source.trim(),
+      id:          novelId,
+      book_name:   book_name.trim(),
+      author:      author.trim(),
       description: description.trim(),
-      tags: parsedTags,
-      coverUrl: coverUrl ? coverUrl.trim() : "",
-      status: novelStatus,
-      read: 0,
-      createdAt: new Date(),
+      status:      novelStatus,
+      genre:       genre.trim(),
+      tag1:        (tag1 || '').toString().trim(),
+      tag2:        (tag2 || '').toString().trim(),
+      tag3:        (tag3 || '').toString().trim(),
+      source_url:  source_url.trim(),
+      read:        typeof read === 'number' ? read : 0,
+      createdAt:   new Date(),
     };
 
     const result = await novelCol.insertOne(newNovel);
@@ -168,20 +161,26 @@ router.put("/:id", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
     const { id } = req.params;
+    const numId = parseInt(id);
 
-    if (!ObjectId.isValid(id)) {
+    if (isNaN(numId)) {
       return res.status(400).json({ error: "Invalid novel ID" });
     }
 
-    const { name, author, genre, source, description, tags, coverUrl, status } = req.body;
+    const {
+      book_name, author, description, status, genre,
+      tag1, tag2, tag3, source_url,
+    } = req.body;
 
     const updates = {};
-    if (name !== undefined) updates.name = name.trim();
-    if (author !== undefined) updates.author = author.trim();
-    if (genre !== undefined) updates.genre = genre.trim();
-    if (source !== undefined) updates.source = source.trim();
+    if (book_name   !== undefined) updates.book_name   = book_name.trim();
+    if (author      !== undefined) updates.author      = author.trim();
     if (description !== undefined) updates.description = description.trim();
-    if (coverUrl !== undefined) updates.coverUrl = coverUrl.trim();
+    if (genre       !== undefined) updates.genre       = genre.trim();
+    if (source_url  !== undefined) updates.source_url  = source_url.trim();
+    if (tag1        !== undefined) updates.tag1        = tag1.toString().trim();
+    if (tag2        !== undefined) updates.tag2        = tag2.toString().trim();
+    if (tag3        !== undefined) updates.tag3        = tag3.toString().trim();
 
     if (status !== undefined) {
       const validStatuses = ["Ongoing", "Completed", "Hiatus"];
@@ -191,19 +190,6 @@ router.put("/:id", async (req, res) => {
       updates.status = status;
     }
 
-    if (tags !== undefined) {
-      const parsedTags = Array.isArray(tags)
-        ? tags.map((t) => t.trim()).filter(Boolean)
-        : typeof tags === "string"
-          ? tags.split(",").map((t) => t.trim()).filter(Boolean)
-          : [];
-
-      if (parsedTags.length > 3) {
-        return res.status(400).json({ error: "Maximum 3 tags allowed" });
-      }
-      updates.tags = parsedTags;
-    }
-
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({ error: "No fields to update" });
     }
@@ -211,7 +197,7 @@ router.put("/:id", async (req, res) => {
     updates.updatedAt = new Date();
 
     const result = await novelCol.findOneAndUpdate(
-      { _id: new ObjectId(id) },
+      { id: numId },
       { $set: updates },
       { returnDocument: "after" }
     );
@@ -232,18 +218,20 @@ router.delete("/:id", async (req, res) => {
   try {
     const { novelCol, reviewCol } = await connectDB();
     const { id } = req.params;
+    const numId = parseInt(id);
 
-    if (!ObjectId.isValid(id)) {
+    if (isNaN(numId)) {
       return res.status(400).json({ error: "Invalid novel ID" });
     }
 
-    const result = await novelCol.deleteOne({ _id: new ObjectId(id) });
+    const result = await novelCol.deleteOne({ id: numId });
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: "Novel not found" });
     }
 
-    await reviewCol.deleteMany({ novelId: new ObjectId(id) });
+    // Cascade delete all reviews for this novel
+    await reviewCol.deleteMany({ novelId: numId });
 
     res.json({ message: "Novel deleted successfully" });
   } catch (err) {

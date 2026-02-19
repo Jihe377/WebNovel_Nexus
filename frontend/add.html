@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Novel | WebNovel Nexus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <style>
+    .tag-item {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--bs-secondary-bg);
+      border: 1px solid var(--bs-border-color);
+      border-radius: 20px;
+      padding: 2px 10px 2px 12px;
+      font-size: .8rem;
+    }
+    .tag-item button {
+      background: none; border: none; padding: 0;
+      line-height: 1; cursor: pointer; color: var(--bs-secondary-color);
+    }
+    .tag-item button:hover { color: var(--bs-danger); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-md sticky-top border-bottom shadow-sm bg-body">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="homepage.html">
+      <span class="bg-primary text-white rounded-2 p-1 d-inline-flex align-items-center">
+        <span class="material-symbols-outlined" style="font-size:20px">book_4</span>
+      </span>
+      WebNovel Nexus
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto gap-md-1 mb-2 mb-md-0">
+        <li class="nav-item"><a class="nav-link" href="index.html"><span class="material-symbols-outlined align-middle" style="font-size:16px">explore</span> Discover</a></li>
+        <li class="nav-item"><a class="nav-link active" href="add.html"><span class="material-symbols-outlined align-middle" style="font-size:16px">add_circle</span> Add Novel</a></li>
+        <li class="nav-item"><a class="nav-link" href="booklist.html"><span class="material-symbols-outlined align-middle" style="font-size:16px">bookmarks</span> My Booklist</a></li>
+      </ul>
+      <div class="d-flex gap-2 align-items-center mt-2 mt-md-0">
+        <button class="btn btn-sm btn-outline-secondary" id="themeToggle" title="Toggle theme">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px" id="themeIcon">dark_mode</span>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px">notifications</span>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px">account_circle</span>
+          My Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="bg-body-tertiary border-bottom py-2">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="homepage.html" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item active">Add Novel</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="container-xl py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="card shadow-sm">
+        <div class="card-header py-3">
+          <span class="fw-bold">
+            <span class="material-symbols-outlined align-middle text-primary me-1" style="font-size:18px">add_circle</span>
+            Add a New Novel
+          </span>
+        </div>
+        <div class="card-body p-4">
+
+          <!-- Book Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Book Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="bookName" placeholder="Enter book title"/>
+            <div class="invalid-feedback">Book name is required.</div>
+          </div>
+
+          <!-- Author -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Author <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="author" placeholder="Enter author name"/>
+            <div class="invalid-feedback">Author is required.</div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Description <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="description" rows="4" placeholder="Write a synopsis…"></textarea>
+            <div class="invalid-feedback">Description is required.</div>
+          </div>
+
+          <!-- Status + Genre row -->
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label class="form-label fw-semibold small">Status <span class="text-danger">*</span></label>
+              <select class="form-select" id="status">
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Hiatus">Hiatus</option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label fw-semibold small">Category <span class="text-danger">*</span></label>
+                <select class="form-select" id="genre">
+                <option value="" disabled selected>Select a category</option>
+                <option>Fantasy</option>
+                <option>Urban</option>
+                <option>Xianxia</option>
+                <option>Historical</option>
+                <option>Game</option>
+                <option>Science Fiction</option>
+                <option>Suspense</option>
+                <option>Romance</option>
+                <option>Fanfiction</option>
+              </select>
+              <div class="invalid-feedback">Genre is required.</div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Tags <span class="text-muted fw-normal">(up to 3)</span></label>
+            <div class="d-flex gap-2">
+              <input type="text" class="form-control" id="tagInput" placeholder="Type a tag and press Enter or Add"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();addTag()}"/>
+              <button class="btn btn-outline-secondary btn-sm px-3" type="button" onclick="addTag()">Add</button>
+            </div>
+            <div class="mt-2 d-flex flex-wrap gap-2" id="tagList"></div>
+            <div class="form-text text-danger d-none" id="tagError">Maximum 3 tags allowed.</div>
+          </div>
+
+          <!-- Source URL -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold small">Source URL <span class="text-danger">*</span></label>
+            <input type="url" class="form-control" id="sourceUrl" placeholder="https://…"/>
+            <div class="invalid-feedback">A valid source URL is required.</div>
+          </div>
+
+          <!-- Error banner -->
+          <div class="alert alert-danger d-none py-2 small" id="formError"></div>
+
+          <!-- Submit -->
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary d-flex align-items-center gap-1" onclick="submitNovel()">
+              <span class="material-symbols-outlined" style="font-size:18px">save</span>
+              Submit Novel
+            </button>
+            <a href="index.html" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-top bg-body-tertiary mt-5 py-4">
+  <div class="container-xl text-center">
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+      <span class="bg-primary bg-opacity-25 text-primary rounded p-1 d-inline-flex">
+        <span class="material-symbols-outlined" style="font-size:18px">book_4</span>
+      </span>
+      <span class="fw-bold">WebNovel Nexus</span>
+    </div>
+    <p class="text-muted small mb-3">Explore thousands of worlds, one chapter at a time.</p>
+    <p class="text-muted" style="font-size:.75rem">Created by Danyan Gu and Xing Zhou</p>
+  </div>
+</footer>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const API_BASE = '/api';
+const tags = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+  restoreTheme();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+});
+
+function addTag() {
+  const input = document.getElementById('tagInput');
+  const val = input.value.trim();
+  const errEl = document.getElementById('tagError');
+
+  if (!val) return;
+
+  if (tags.length >= 3) {
+    errEl.classList.remove('d-none');
+    input.value = '';
+    return;
+  }
+
+  // Deduplicate
+  if (tags.includes(val)) { input.value = ''; return; }
+
+  tags.push(val);
+  errEl.classList.add('d-none');
+  input.value = '';
+  renderTags();
+}
+
+function removeTag(idx) {
+  tags.splice(idx, 1);
+  document.getElementById('tagError').classList.add('d-none');
+  renderTags();
+}
+
+function renderTags() {
+  document.getElementById('tagList').innerHTML = tags.map((t, i) => `
+    <span class="tag-item">
+      ${esc(t)}
+      <button type="button" onclick="removeTag(${i})" title="Remove">
+        <span class="material-symbols-outlined" style="font-size:16px">close</span>
+      </button>
+    </span>`).join('');
+}
+
+async function submitNovel() {
+  const bookName    = document.getElementById('bookName').value.trim();
+  const author      = document.getElementById('author').value.trim();
+  const description = document.getElementById('description').value.trim();
+  const status      = document.getElementById('status').value;
+  const genre       = document.getElementById('genre').value.trim();
+  const sourceUrl   = document.getElementById('sourceUrl').value.trim();
+  const errEl       = document.getElementById('formError');
+
+  // Clear previous validation
+  ['bookName','author','description','genre','sourceUrl'].forEach(id => {
+    document.getElementById(id).classList.remove('is-invalid');
+  });
+  errEl.classList.add('d-none');
+
+  // Validate
+  let valid = true;
+  if (!bookName)    { document.getElementById('bookName').classList.add('is-invalid');    valid = false; }
+  if (!author)      { document.getElementById('author').classList.add('is-invalid');      valid = false; }
+  if (!description) { document.getElementById('description').classList.add('is-invalid'); valid = false; }
+  if (!genre)       { document.getElementById('genre').classList.add('is-invalid');       valid = false; }
+  if (!sourceUrl)   { document.getElementById('sourceUrl').classList.add('is-invalid');   valid = false; }
+
+  if (!valid) return;
+
+  // Get next id from server
+  let nextId = 1;
+  try {
+    const res = await fetch(`${API_BASE}/novels?limit=1000&page=1`);
+    if (res.ok) {
+      const data = await res.json();
+      const all = data.novels || [];
+      if (all.length > 0) {
+        nextId = Math.max(...all.map(n => n.id || 0)) + 1;
+      }
+    }
+  } catch (_) {}
+
+  const payload = {
+    id: nextId,
+    book_name: bookName,
+    author,
+    description,
+    status,
+    genre,
+    tag1: tags[0] || '',
+    tag2: tags[1] || '',
+    tag3: tags[2] || '',
+    source_url: sourceUrl,
+    read: 0,
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/novels`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Failed to add novel.';
+      errEl.classList.remove('d-none');
+      return;
+    }
+
+    showToast('Novel added successfully!', 'success');
+
+    // Redirect to the new novel's page after short delay
+    setTimeout(() => {
+      window.location.href = `novel.html?id=${nextId}`;
+    }, 1200);
+
+  } catch (e) {
+    console.error(e);
+    errEl.textContent = 'Network error. Please try again.';
+    errEl.classList.remove('d-none');
+  }
+}
+
+function showToast(msg, type = 'secondary') {
+  const id = 'toast_' + Date.now();
+  document.getElementById('toastContainer').insertAdjacentHTML('beforeend', `
+    <div id="${id}" class="toast align-items-center text-bg-${type} border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body">${msg}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>`);
+  new bootstrap.Toast(document.getElementById(id), { delay: 2000 }).show();
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-bs-theme') === 'dark';
+  html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').textContent = isDark ? 'dark_mode' : 'light_mode';
+  localStorage.setItem('nn-theme', isDark ? 'light' : 'dark');
+}
+
+function restoreTheme() {
+  const saved = localStorage.getItem('nn-theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-bs-theme', saved);
+    const icon = document.getElementById('themeIcon');
+    if (icon) icon.textContent = saved === 'dark' ? 'light_mode' : 'dark_mode';
+  }
+}
+</script>
+</body>
+</html>

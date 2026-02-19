@@ -64,7 +64,6 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb mb-0 small">
         <li class="breadcrumb-item"><a href="homepage.html" class="text-decoration-none">Home</a></li>
-        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Discover</a></li>
         <li class="breadcrumb-item active" id="breadcrumbTitle">Novel</li>
       </ol>
     </nav>
@@ -98,7 +97,10 @@
                 <span class="material-symbols-outlined text-white" style="font-size:48px">auto_stories</span>
               </div>
               <div class="flex-grow-1">
-                <h2 class="fw-bold mb-1" id="novelName">—</h2>
+                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                  <h2 class="fw-bold mb-0" id="novelName">—</h2>
+                  <span id="novelStatus" class="badge"></span>
+                </div>
                 <p class="text-muted mb-2">
                   <span class="material-symbols-outlined align-middle me-1" style="font-size:16px">person</span>
                   <span id="novelAuthor">—</span>
@@ -268,6 +270,18 @@ function renderNovel(n) {
   document.title = `${esc(n.book_name || n.name)} | WebNovel Nexus`;
   document.getElementById('breadcrumbTitle').textContent = n.book_name || n.name || 'Novel';
   document.getElementById('novelName').textContent = n.book_name || n.name || 'Untitled';
+
+  // Status badge
+  const statusEl = document.getElementById('novelStatus');
+  const statusMap = {
+    'Completed': 'bg-success',
+    'Ongoing':   'bg-warning text-dark',
+    'Hiatus':    'bg-secondary',
+  };
+  if (n.status) {
+    statusEl.textContent = n.status;
+    statusEl.className = `badge ${statusMap[n.status] || 'bg-secondary'}`;
+  }
   document.getElementById('novelAuthor').textContent = n.author || 'Unknown Author';
   document.getElementById('novelDesc').textContent = n.description || n.desc || 'No synopsis available.';
   document.getElementById('novelReads').textContent = fmtNum(n.read || 0);
