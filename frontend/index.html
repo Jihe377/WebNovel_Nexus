@@ -412,7 +412,7 @@ function clearAllFilters() {
 function updateActiveFiltersSummary() {
   const wrap = document.getElementById('activeFiltersWrap');
   const list = document.getElementById('activeFiltersList');
-  const has = state.search || state.includeTags.size || state.excludeTags.size;
+  const has = state.search || state.genre || state.includeTags.size || state.excludeTags.size;
   if (!has) { wrap.classList.add('d-none'); return; }
   wrap.classList.remove('d-none');
   list.innerHTML = '';
@@ -527,8 +527,7 @@ function renderNovels(novels) {
       : '';
 
     // Tags (max shown: 3)
-    const tagsHtml = [novel.tag1, novel.tag2, novel.tag3]
-      .filter(Boolean)
+    const tagsHtml = [...new Set([novel.tag1, novel.tag2, novel.tag3].filter(Boolean))]
       .map(t => `<span class="badge rounded-pill bg-info-subtle text-info-emphasis border border-info-subtle" style="font-size:0.7rem;font-weight:500">${esc(t)}</span>`)
       .join('');
 
