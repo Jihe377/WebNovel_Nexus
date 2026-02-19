@@ -6,15 +6,16 @@ const URI = process.env.MONGO_URI;
 const DB_NAME = process.env.DB_NAME || "novel_db";
 
 if (!URI) {
-  console.error("Missing MONGO_URI environment variable");
-  process.exit(1);
+  throw new Error("Missing MONGO_URI environment variable");
 }
 
-const client = new MongoClient(URI);
+// 复用连接（Vercel Serverless 环境下避免每次请求重新建立连接）
+let client = new MongoClient(URI);
+let clientPromise = client.connect();
 
 async function connectDB() {
   try {
-    await client.connect();
+    await clientPromise;
     console.log("Connection Successful");
 
     const db = client.db(DB_NAME);
@@ -26,7 +27,7 @@ async function connectDB() {
     return { novelCol, reviewCol };
   } catch (err) {
     console.error("Failed to connect:", err);
-    process.exit(1);
+    throw err;
   }
 }
 
