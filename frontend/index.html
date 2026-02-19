@@ -9,41 +9,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
 
   <style>
-    /* ── 1. CSS variables for theming (Bootstrap can't do custom brand colors in dark mode) ── */
-    :root {
-      --nn-primary: #0d6cf2;
-    }
-
-    /* ── 2. Glassmorphism navbar (Bootstrap has no backdrop-filter support) ── */
-    /* Higher specificity (nav + class) beats Bootstrap's .navbar without !important */
+    /* ── 1. Glassmorphism navbar
+          nav.nn-navbar (specificity 0,1,1) beats Bootstrap's .navbar (0,1,0) ── */
     nav.nn-navbar {
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       background: rgba(255, 255, 255, 0.85);
+      /* z-index higher than sticky sidebar so sidebar scrolls under navbar */
+      z-index: 1030;
     }
     [data-bs-theme="dark"] nav.nn-navbar {
       background: rgba(16, 25, 34, 0.88);
     }
 
-    /* ── 3. Card cover image zoom on hover (Bootstrap has no group-hover) ── */
-    .nn-card .card-img-top {
-      transition: transform 0.45s ease;
-    }
-    .nn-card:hover .card-img-top {
-      transform: scale(1.06);
-    }
-    .nn-card-img-wrap {
-      aspect-ratio: 2 / 3;
-      overflow: hidden;
-    }
-    .nn-card-img-wrap img,
-    .nn-card-img-wrap .nn-no-cover {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    /* ── 2. Sidebar top offset matches navbar height (64px) so it never
+          overlaps the navbar when sticky ── */
+    .nn-sidebar-inner {
+      position: sticky;
+      top: 64px;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
     }
 
-    /* ── 4. Skeleton shimmer animation (Bootstrap placeholder has no shimmer) ── */
+    /* ── 3. Skeleton shimmer (Bootstrap placeholder has no gradient sweep) ── */
     .nn-shimmer {
       background: linear-gradient(90deg,
         var(--bs-secondary-bg) 25%,
@@ -51,45 +39,54 @@
         var(--bs-secondary-bg) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
+      border-radius: 4px;
     }
     @keyframes shimmer {
       from { background-position: 200% 0; }
       to   { background-position: -200% 0; }
     }
-    .nn-skeleton-img {
-      aspect-ratio: 2 / 3;
-    }
 
-    /* ── 5. Line-clamp (not in Bootstrap utilities) ── */
+    /* ── 4. Line-clamp (no Bootstrap utility for this) ── */
     .nn-line-clamp-3 {
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+
+    /* ── 5. Card hover lift (Bootstrap has no hover-shadow + translate) ── */
+    .nn-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+    .nn-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ── 6. Star rating color ── */
+    .nn-stars { color: #f59e0b; }
   </style>
 </head>
 <body>
 
 <!-- ═══════════════ NAVBAR ═══════════════ -->
-<nav class="nn-navbar navbar navbar-expand-md sticky-top border-bottom shadow-sm">
+<nav class="navbar navbar-expand-md sticky-top border-bottom shadow-sm bg-body">
   <div class="container-xl">
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="homepage.html">
       <span class="bg-primary text-white rounded-2 p-1 d-inline-flex align-items-center">
         <span class="material-symbols-outlined" style="font-size:20px">book_4</span>
       </span>
-      WebNovel_Nexus
+      WebNovel Nexus
     </a>
-
     <button class="navbar-toggler" type="button"
       data-bs-toggle="collapse" data-bs-target="#mainNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav me-auto gap-md-1 mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link active fw-semibold" href="index.html">
+          <a class="nav-link" href="index.html">
             <span class="material-symbols-outlined align-middle" style="font-size:16px">explore</span>
             Discover
           </a>
@@ -139,6 +136,17 @@
           </span>
           <input id="searchInput" type="text" class="form-control"
             placeholder="Search novels…" autocomplete="off"/>
+        </div>
+
+        <!-- Genre Filter -->
+        <div class="card mb-3">
+          <div class="card-header d-flex align-items-center gap-1 py-2">
+            <span class="material-symbols-outlined text-primary" style="font-size:16px">category</span>
+            <span class="fw-bold small text-primary">Genre</span>
+          </div>
+          <div class="card-body py-2 px-2">
+            <div class="d-flex flex-wrap gap-1" id="genreFilters"></div>
+          </div>
         </div>
 
         <!-- Include Tags -->
@@ -197,7 +205,7 @@
       </div>
 
       <!-- Grid -->
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4 mb-4" id="novelGrid"></div>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-4" id="novelGrid"></div>
 
       <!-- Pagination -->
       <nav aria-label="Novel pages" class="d-flex justify-content-center">
@@ -208,8 +216,6 @@
   </div>
 </main>
 
-
-<!-- ═══════════════ FOOTER ═══════════════ -->
 <!-- FOOTER -->
 <footer class="border-top bg-body-tertiary mt-5 py-4">
   <div class="container-xl text-center">
@@ -230,18 +236,29 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* ═══════════════════════════════════════
-   CONFIG
-═══════════════════════════════════════ */
+
+
 const API_BASE = '/api';
 
-const ALL_INCLUDE_TAGS = [
-  'Fantasy', 'Sci-Fi', 'Romance', 'Mystery', 'Horror', 'Action',
-  'LitRPG', 'Xianxia', 'Cultivation', 'Progression', 'Historical',
-  'Dungeon Core', 'System', 'Reincarnation',
+const ALL_GENRES = [
+  'Fantasy', 'Urban', 'Xianxia', 'Historical',
+  'Game', 'Science Fiction', 'Suspense', 'Romance', 'Fanfiction',
 ];
+
+const ALL_INCLUDE_TAGS = [
+  'Rebirth', 'Infinite Flow', 'Apocalypse', 'Interstellar', 'Cultivation',
+  'Strong vs. Strong', 'Arranged Marriage', 'Reconciliation', 'Unrequited Love',
+  'Pursuing Wife Through Fire', 'Satisfying Read', 'Angsty Read', 'Sweet Read',
+  'Suspense', 'Leveling Up', 'Beautiful Strong and Tragic', 'Crazy',
+  'Yandere', 'Cold', 'Loyal Dog',
+];
+
 const ALL_EXCLUDE_TAGS = [
-  'Tragedy', 'Dark Fantasy', 'Harem', 'Gore', 'Slow Burn', 'NTR',
+  'Rebirth', 'Infinite Flow', 'Apocalypse', 'Interstellar', 'Cultivation',
+  'Strong vs. Strong', 'Arranged Marriage', 'Reconciliation', 'Unrequited Love',
+  'Pursuing Wife Through Fire', 'Satisfying Read', 'Angsty Read', 'Sweet Read',
+  'Suspense', 'Leveling Up', 'Beautiful Strong and Tragic', 'Crazy',
+  'Yandere', 'Cold', 'Loyal Dog',
 ];
 
 /* ═══════════════════════════════════════
@@ -273,6 +290,17 @@ document.addEventListener('DOMContentLoaded', () => {
    TAG UI
 ═══════════════════════════════════════ */
 function buildTagUI() {
+  // Genre buttons
+  const genreContainer = document.getElementById('genreFilters');
+  ALL_GENRES.forEach(g => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline-primary btn-sm';
+    btn.textContent = g;
+    btn.dataset.genre = g;
+    btn.addEventListener('click', () => toggleGenre(btn, g));
+    genreContainer.appendChild(btn);
+  });
+
   ALL_INCLUDE_TAGS.forEach(tag => {
     const btn = makeTagBtn(tag, () => toggleIncludeTag(btn, tag));
     document.getElementById('includeTags').appendChild(btn);
@@ -319,6 +347,26 @@ function bindEvents() {
 /* ═══════════════════════════════════════
    TAG TOGGLES
 ═══════════════════════════════════════ */
+
+function toggleGenre(btn, genre) {
+  if (state.genre === genre) {
+    // Deselect
+    state.genre = '';
+    btn.className = 'btn btn-outline-primary btn-sm';
+  } else {
+    // Deselect previous
+    document.querySelectorAll('#genreFilters .btn').forEach(b => {
+      b.className = 'btn btn-outline-primary btn-sm';
+    });
+    state.genre = genre;
+    btn.className = 'btn btn-primary btn-sm';
+  }
+  state.page = 1;
+  updateActiveFiltersSummary();
+  fetchNovels();
+}
+
+
 function toggleIncludeTag(btn, tag) {
   // Remove from exclude if there
   if (state.excludeTags.has(tag)) {
@@ -332,8 +380,6 @@ function toggleIncludeTag(btn, tag) {
   } else {
     state.includeTags.add(tag);
     btn.className = 'btn btn-primary btn-sm';
-    saveClickedTag(tag);
-    showToast(`Tag "${tag}" saved to preferences`, 'success');
   }
   state.page = 1;
   updateActiveFiltersSummary();
@@ -359,17 +405,8 @@ function toggleExcludeTag(btn, tag) {
   fetchNovels();
 }
 
-function saveClickedTag(tag) {
-  // Persisted for /api/recommendations Jaccard engine
-  const clicked = JSON.parse(localStorage.getItem('clickedTags') || '[]');
-  if (!clicked.includes(tag)) {
-    clicked.push(tag);
-    localStorage.setItem('clickedTags', JSON.stringify(clicked));
-  }
-}
-
 function clearAllFilters() {
-  state.search = ''; state.includeTags.clear(); state.excludeTags.clear(); state.page = 1;
+  state.search = ''; state.genre = ''; state.includeTags.clear(); state.excludeTags.clear(); state.page = 1;
   document.getElementById('searchInput').value = '';
   document.querySelectorAll('#includeTags .btn, #excludeTags .btn')
     .forEach(b => { b.className = 'btn btn-outline-secondary btn-sm'; });
@@ -390,6 +427,9 @@ function updateActiveFiltersSummary() {
   if (state.search)
     list.insertAdjacentHTML('beforeend',
       `<span class="badge text-bg-secondary">🔍 "${esc(state.search)}"</span>`);
+  if (state.genre)
+    list.insertAdjacentHTML('beforeend',
+      `<span class="badge text-bg-primary">📚 ${esc(state.genre)}</span>`);
   state.includeTags.forEach(t =>
     list.insertAdjacentHTML('beforeend',
       `<span class="badge text-bg-primary">+${esc(t)}</span>`));
@@ -409,6 +449,7 @@ async function fetchNovels() {
 
   const params = new URLSearchParams();
   if (state.search)           params.set('search',  state.search);
+  if (state.genre)            params.set('genre',   state.genre);
   if (state.includeTags.size) params.set('tags',    [...state.includeTags].join(','));
   if (state.excludeTags.size) params.set('exclude', [...state.excludeTags].join(','));
   params.set('page',  String(state.page));
@@ -437,18 +478,23 @@ async function fetchNovels() {
 function showSkeletons() {
   document.getElementById('novelGrid').innerHTML =
     Array.from({ length: 6 }).map(() => `
-      <div class="col">
-        <div class="card h-100 shadow-sm">
-          <div class="nn-shimmer nn-skeleton-img rounded-top"></div>
-          <div class="card-body">
-            <div class="nn-shimmer rounded mb-2" style="height:15px;width:70%"></div>
-            <div class="nn-shimmer rounded mb-3" style="height:11px;width:45%"></div>
-            <div class="nn-shimmer rounded mb-2" style="height:10px"></div>
-            <div class="nn-shimmer rounded mb-2" style="height:10px;width:85%"></div>
-            <div class="nn-shimmer rounded mb-3" style="height:10px;width:60%"></div>
-            <div class="nn-shimmer rounded" style="height:34px"></div>
+    <div class='col'>
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="nn-shimmer mb-1" style="height:18px;width:55%"></div>
+            <div class="nn-shimmer" style="height:22px;width:70px"></div>
+          </div>
+          <div class="nn-shimmer mb-3" style="height:13px;width:35%"></div>
+          <div class="nn-shimmer mb-2" style="height:12px;width:100%"></div>
+          <div class="nn-shimmer mb-2" style="height:12px;width:88%"></div>
+          <div class="nn-shimmer mb-3" style="height:12px;width:70%"></div>
+          <div class="d-flex gap-1">
+            <div class="nn-shimmer" style="height:24px;width:70px;border-radius:12px"></div>
+            <div class="nn-shimmer" style="height:24px;width:80px;border-radius:12px"></div>
           </div>
         </div>
+      </div>
       </div>`).join('');
 }
 
@@ -461,57 +507,99 @@ function renderNovels(novels) {
 
   if (!novels || novels.length === 0) {
     grid.innerHTML = `
-      <div class="col-12 text-center py-5 text-muted">
+      <div class="text-center py-5 text-muted">
         <span class="material-symbols-outlined d-block mb-2" style="font-size:48px;opacity:.4">search_off</span>
         <h6 class="fw-bold">No novels found</h6>
-        <small>Try adjusting your search or tag filters.</small>
+        <small>Try adjusting your search or filters.</small>
       </div>`;
     return;
   }
 
   novels.forEach(novel => {
-    const id = novel._id;
+    const navId = novel.id ?? novel._id;
+
+
     const statusCls = {
-      Ongoing:   'text-bg-success',
-      Completed: 'text-bg-primary',
-      Hiatus:    'text-bg-warning',
-    }[novel.status] || 'text-bg-secondary';
+      ongoing:   'text-bg-warning',
+      completed: 'text-bg-success',
+      hiatus:    'text-bg-secondary',
+    }[novel.status?.toLowerCase()] || 'text-bg-secondary';
+    
+    const statusLabel = novel.status
+      ? novel.status.charAt(0).toUpperCase() + novel.status.slice(1)
+      : 'Ongoing';
 
-    const tagsHtml = (novel.tags || [])
-      .map(t => `<span class="badge text-bg-primary bg-opacity-75">${esc(t)}</span>`)
-      .join(' ');
+    // Genre badge
+    const genreHtml = novel.genre
+      ? `<span class="badge text-bg-secondary">${esc(novel.genre)}</span>`
+      : '';
 
-    const imgContent = novel.coverUrl
-      ? `<img src="${esc(novel.coverUrl)}" class="card-img-top" alt="${esc(novel.name)}" loading="lazy"
-             onerror="this.parentNode.innerHTML='<div class=&quot;nn-no-cover bg-secondary-subtle d-flex align-items-center justify-content-center&quot;><span class=&quot;material-symbols-outlined text-secondary&quot; style=&quot;font-size:40px&quot;>auto_stories</span></div>'">`
-      : `<div class="nn-no-cover bg-secondary-subtle d-flex align-items-center justify-content-center">
-           <span class="material-symbols-outlined text-secondary" style="font-size:40px">auto_stories</span>
-         </div>`;
+    // Tags (max shown: 3)
+    const tagsHtml = [novel.tag1, novel.tag2, novel.tag3]
+      .filter(Boolean)
+      .map(t => `<span class="badge rounded-pill bg-info-subtle text-info-emphasis border border-info-subtle" style="font-size:0.7rem;font-weight:500">${esc(t)}</span>`)
+      .join('');
+
+    // Star rating  (novel.rating optional field; show read count if no rating)
+    const ratingHtml = novel.rating != null
+      ? `<span class="nn-stars fw-bold">★</span>
+         <span class="fw-semibold">${Number(novel.rating).toFixed(1)}</span>`
+      : '';
+
+    // Review / read count
+    const readHtml = novel.read != null
+      ? `<span class="material-symbols-outlined align-middle text-muted" style="font-size:15px">visibility</span>
+         <span class="text-muted small">${Number(novel.read).toLocaleString()}</span>`
+      : '';
+
+    const reviewHtml = novel.reviewCount != null
+      ? `<span class="material-symbols-outlined align-middle text-muted" style="font-size:15px">chat_bubble</span>
+         <span class="text-muted small">${Number(novel.reviewCount).toLocaleString()}</span>`
+      : '';
 
     grid.insertAdjacentHTML('beforeend', `
-      <div class="col">
-        <div class="card h-100 shadow-sm nn-card" role="button" onclick="goToNovel('${id}')">
-          <div class="nn-card-img-wrap position-relative">
-            ${imgContent}
-            <span class="badge ${statusCls} position-absolute top-0 end-0 m-2">
-              ${esc(novel.status || 'Ongoing')}
-            </span>
+    <div class='col'>
+      <div class="card h-100 shadow-sm nn-card" onclick="goToNovel('${navId}')">
+        <div class="card-body">
+
+          <!-- Title row -->
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+            <h6 class="card-title fw-bold mb-0 flex-grow-1 text-truncate" title="${esc(novel.book_name)}">
+              ${esc(novel.book_name)}
+            </h6>
+            <span class="badge ${statusCls} flex-shrink-0">${statusLabel}</span>
           </div>
-          <div class="card-body d-flex flex-column">
-            <h6 class="card-title fw-bold text-truncate mb-1" title="${esc(novel.name)}">${esc(novel.name)}</h6>
-            <p class="text-muted small mb-2">By ${esc(novel.author)}</p>
-            ${tagsHtml ? `<div class="d-flex flex-wrap gap-1 mb-2">${tagsHtml}</div>` : ''}
-            <p class="card-text small text-muted flex-grow-1 nn-line-clamp-3">
-              ${esc(novel.description || '')}
-            </p>
-            <button class="btn btn-primary btn-sm mt-2 d-flex align-items-center justify-content-center gap-1"
-              onclick="event.stopPropagation(); addToBookshelf('${id}', '${esc(novel.name)}')">
-              <span class="material-symbols-outlined" style="font-size:16px">library_add</span>
+
+          <!-- Author + genre row -->
+          <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+            <small class="text-muted">By ${esc(novel.author)} · ${esc(novel.genre || '')}</small>
+          </div>
+
+          <!-- Description -->
+          <p class="card-text small text-muted mb-2 nn-line-clamp-3">
+            ${esc(novel.description || '')}
+          </p>
+
+          <!-- Stats row -->
+          <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
+            ${ratingHtml ? `<span class="d-flex align-items-center gap-1">${ratingHtml}</span>` : ''}
+            ${readHtml   ? `<span class="d-flex align-items-center gap-1">${readHtml}</span>`   : ''}
+            ${reviewHtml ? `<span class="d-flex align-items-center gap-1">${reviewHtml}</span>` : ''}
+          </div>
+
+          <!-- Tags + action -->
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="d-flex flex-wrap gap-1">${tagsHtml}</div>
+            <button class="btn btn-primary btn-sm d-flex align-items-center gap-1 flex-shrink-0"
+              onclick="event.stopPropagation(); addToBookshelf('${navId}', '${esc(novel.book_name)}')">
+              <span class="material-symbols-outlined" style="font-size:15px">library_add</span>
               Add to Bookshelf
             </button>
           </div>
+
         </div>
-      </div>`);
+      </div>
+    </div>`);
   });
 }
 
