@@ -48,11 +48,17 @@ A centralized web application for tracking, discovering, and reviewing internet 
 ```
 WebNovel_Nexus/
 ├── frontend/
-│   ├── homepage.html     # Novel rank by genre
-│   ├── index.html        # Discover / search page
-│   ├── novel.html        # Novel detail + reviews + recommendations
-│   ├── add.html          # Add a new novel
-│   └── booklist.html     # Community booklists
+│   ├── css/
+│   │   ├── add.css
+│   │   ├── booklist.css
+│   │   ├── discover.css
+│   │   └── novel.css
+│   ├── js/                      # Client-side scripts
+│   ├── homepage.html            # Novel rank by genre
+│   ├── index.html               # Discover / search page
+│   ├── novel.html               # Novel detail + reviews + recommendations
+│   ├── add.html                 # Add a new novel
+│   └── booklist.html            # Community booklists
 ├── src/
 │   ├── modules/
 │   │   ├── mongodb-connect.js   # MongoDB connection
