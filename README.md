@@ -67,38 +67,6 @@ WebNovel_Nexus/
 
 ---
 
-## Database Schema
-
-**Database:** `novel_db` (MongoDB)
-
-### NOVEL Collection
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `_id` | ObjectId | MongoDB primary key |
-| `id` | Number | Custom novel ID |
-| `book_name` | String | Novel title |
-| `author` | String | Author name |
-| `genre` | String | Primary genre |
-| `description` | String | Synopsis |
-| `status` | String | `"Ongoing"` / `"Completed"` / `"Hiatus"` |
-| `tag1/2/3` | String | Up to 3 tags/tropes |
-| `source_url` | String | Link to original source |
-| `read` | Number | Read count for ranking |
-
-### REVIEW Collection
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `_id` | ObjectId | MongoDB primary key |
-| `novelId` | Number | Foreign key → NOVEL.id |
-| `username` | String | Reviewer name |
-| `rating` | Number | 1–5 stars |
-| `body` | String | Review text |
-| `createdAt` | Date | Submission timestamp |
-
----
-
 ## Getting Started
 
 ### Prerequisites
