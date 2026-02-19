@@ -260,21 +260,7 @@ async function submitNovel() {
 
   if (!valid) return;
 
-  // Get next id from server
-  let nextId = 1;
-  try {
-    const res = await fetch(`${API_BASE}/novels?limit=1000&page=1`);
-    if (res.ok) {
-      const data = await res.json();
-      const all = data.novels || [];
-      if (all.length > 0) {
-        nextId = Math.max(...all.map(n => n.id || 0)) + 1;
-      }
-    }
-  } catch (_) {}
-
   const payload = {
-    id: nextId,
     book_name: bookName,
     author,
     description,
@@ -306,7 +292,7 @@ async function submitNovel() {
 
     // Redirect to the new novel's page after short delay
     setTimeout(() => {
-      window.location.href = `novel.html?id=${nextId}`;
+      window.location.href = `novel.html?id=${data.novel.id}`;
     }, 1200);
 
   } catch (e) {
