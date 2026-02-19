@@ -8,8 +8,8 @@ Currently, the landscape of internet novels (web fiction, serialized online stor
  - **Database:** MongoDB
 
 ### Database Schema
-**Database**: 'novel_db'
-**Type**: MongoDB
+**Database**: 'novel_db'\
+**Type**: MongoDB\
 **Collections**: 2
 
 #### Collection 1: NOVEL
