@@ -23,6 +23,7 @@ export default [
         URLSearchParams: "readonly",
         localStorage: "readonly",
         bootstrap: "readonly",
+        location: "readonly",
       },
     },
     rules: {
