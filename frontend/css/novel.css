@@ -1,0 +1,13 @@
+.star-rating { color: #f5a623; }
+.review-card { transition: box-shadow .2s; }
+.review-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1)!important; }
+.rec-item { transition: background .15s; cursor: pointer; }
+.rec-item:hover { background: var(--bs-secondary-bg)!important; }
+.cover-placeholder {
+    width: 140px; height: 200px;
+    background: #7c3aed;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.tag-badge { font-size: .7rem; }
