@@ -3,7 +3,7 @@
 A centralized web application for tracking, discovering, and reviewing internet novels (web fiction, serialized stories, fanfiction) across platforms like Royal Road, Wattpad, AO3, and more.
 
 **Live Demo:** [https://webnovel-nexus.onrender.com](https://webnovel-nexus.onrender.com)\
-**Class Link** [Course Detail](https://johnguerra.co/classes/webDevelopment_online_spring_2026/)
+**Class Link** [Course Detail](https://johnguerra.co/classes/webDevelopment_online_spring_2026/)\
 **YouTube Link** [Introduction Video](https://youtu.be/kN3GpWVhOtU)
 
 ---
