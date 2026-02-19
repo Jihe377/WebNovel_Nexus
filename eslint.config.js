@@ -5,13 +5,24 @@ export default [
       ecmaVersion: 2022,
       sourceType: "module",
       globals: {
+        // Browser globals
         document: "readonly",
         window: "readonly",
         console: "readonly",
         fetch: "readonly",
+        // Node.js globals
         process: "readonly",
         __dirname: "readonly",
         __filename: "readonly",
+        // Timer globals (browser + Node)
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        // Web APIs used in this project
+        URLSearchParams: "readonly",
+        localStorage: "readonly",
+        bootstrap: "readonly",
       },
     },
     rules: {
