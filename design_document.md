@@ -90,9 +90,9 @@ This story exercises: recommendation algorithm (tag-overlap scoring), READ acros
 ## 4. Design Mockups
 <img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/ef75d314-2767-4531-a7bb-6fbaf40754a8" />
 <img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/4f9e9c43-d91c-4b96-b28e-68364c7791d4" />
-<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/b06c70bc-939c-438e-a587-7bb9900ee644" />
-<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/3d85aabd-f846-4c17-ab4e-fa7516915ba8" />
 <img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/6d60c113-0ca2-4ecc-bcb5-e93d3347bbe5" />
+<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/3d85aabd-f846-4c17-ab4e-fa7516915ba8" />
+<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/b06c70bc-939c-438e-a587-7bb9900ee644" />
 
 ## 5. Work Distribution
 ### Danyan Gu -- Novel Search, Discover, and Add Novel
