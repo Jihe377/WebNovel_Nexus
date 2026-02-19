@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Booklist | WebNovel Nexus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <style>
+    .novel-row:hover { background-color: var(--bs-secondary-bg); }
+    .btn-like.active { color: #dc3545; border-color: #dc3545; }
+    .card-enter { animation: fadeSlideIn 0.3s ease both; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-md sticky-top border-bottom shadow-sm bg-body">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="homepage.html">
+      <span class="bg-primary text-white rounded-2 p-1 d-inline-flex align-items-center">
+        <span class="material-symbols-outlined" style="font-size:20px">book_4</span>
+      </span>
+      WebNovel Nexus
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto gap-md-1 mb-2 mb-md-0">
+        <li class="nav-item"><a class="nav-link" href="index.html"><span class="material-symbols-outlined align-middle" style="font-size:16px">explore</span> Discover</a></li>
+        <li class="nav-item"><a class="nav-link" href="add.html"><span class="material-symbols-outlined align-middle" style="font-size:16px">add_circle</span> Add Novel</a></li>
+        <li class="nav-item"><a class="nav-link active" href="booklist.html"><span class="material-symbols-outlined align-middle" style="font-size:16px">bookmarks</span> My Booklist</a></li>
+      </ul>
+      <div class="d-flex gap-2 align-items-center mt-2 mt-md-0">
+        <button class="btn btn-sm btn-outline-secondary" id="themeToggle" title="Toggle theme">
+          <span class="material-symbols-outlined align-middle" style="font-size:18px" id="themeIcon">dark_mode</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="bg-body-tertiary border-bottom py-2">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="homepage.html" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item active">My Booklist</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+
+<main class="container-xl py-4">
+  <h4 class="fw-semibold mb-1">Community Booklists</h4>
+  <p class="text-muted small mb-4">Like a list to save it to your panel on the right.</p>
+
+  <div class="row g-4">
+    <!-- Left: all booklists -->
+    <div class="col-lg-8">
+      <div id="community-lists"></div>
+    </div>
+
+    <!-- Right: liked booklists -->
+    <div class="col-lg-4">
+      <p class="fw-semibold text-danger mb-2">My Liked Lists</p>
+      <div id="liked-lists">
+        <p class="text-muted small" id="empty-liked">No liked lists yet. Like a list to save it here.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-top bg-body-tertiary mt-5 py-4">
+  <div class="container-xl text-center">
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+      <span class="bg-primary bg-opacity-25 text-primary rounded p-1 d-inline-flex">
+        <span class="material-symbols-outlined" style="font-size:18px">book_4</span>
+      </span>
+      <span class="fw-bold">WebNovel Nexus</span>
+    </div>
+    <p class="text-muted small mb-3">Explore thousands of worlds, one chapter at a time.</p>
+    <p class="text-muted" style="font-size:.75rem">Created by Danyan Gu and Xing Zhou</p>
+  </div>
+</footer>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const DATA = [
+  {
+    id: 1, editor: true,
+    title: "Best Xianxia of the Decade",
+    creator: "CultivationKing99", initials: "CK",
+    books: 32, views: "18.4K", saves: 247,
+    desc: "The definitive ranking of Xianxia and Cultivation novels — from ISSTH to A Will Eternal.",
+    novels: [
+      { name: "I Shall Seal the Heavens",    author: "Er Gen",         tag: "Xianxia"     },
+      { name: "A Will Eternal",              author: "Er Gen",         tag: "Xianxia"     },
+      { name: "Lord of the Mysteries",       author: "Cuttlefish",     tag: "Mystery"     },
+      { name: "The Desolate Era",            author: "I Eat Tomatoes", tag: "Cultivation" },
+      { name: "Coiling Dragon",              author: "I Eat Tomatoes", tag: "Xianxia"     },
+    ]
+  },
+  {
+    id: 2, editor: true,
+    title: "LitRPG Must-Reads 2024",
+    creator: "DungeonDelver", initials: "DD",
+    books: 19, views: "12.1K", saves: 183,
+    desc: "System apocalypse, dungeon-core, and progression fantasy ranked by actual readers.",
+    novels: [
+      { name: "The Beginning After the End", author: "TurtleMe",      tag: "LitRPG"      },
+      { name: "Dungeon Crawler Carl",        author: "Matt Dinniman", tag: "Dungeon Core" },
+      { name: "He Who Fights With Monsters", author: "Jason Cheyne",  tag: "LitRPG"      },
+      { name: "Primal Hunter",               author: "Zogarth",       tag: "Progression" },
+      { name: "Azarinth Healer",             author: "Rhaegar",       tag: "LitRPG"      },
+    ]
+  },
+  {
+    id: 3, editor: false,
+    title: "Isekai Hidden Gems",
+    creator: "AnotherWorldFan", initials: "AW",
+    books: 14, views: "8.7K", saves: 95,
+    desc: "Not your typical truck-kun stories. Under-appreciated isekai titles that deserve more attention.",
+    novels: [
+      { name: "Mother of Learning",          author: "Domagoj Kurmaic", tag: "Time Loop" },
+      { name: "Unsouled",                    author: "Will Wight",      tag: "Isekai"    },
+      { name: "Forgotten Conqueror",         author: "darkwolf76",      tag: "Action"    },
+      { name: "An Outcast in Another World", author: "Ringo",           tag: "Isekai"    },
+      { name: "The New World",               author: "Monsoon117",      tag: "LitRPG"    },
+    ]
+  },
+  {
+    id: 4, editor: false,
+    title: "Completed Stories Only",
+    creator: "NoCliffhangers", initials: "NC",
+    books: 28, views: "21K", saves: 412,
+    desc: "For readers tired of hiatus and dropped series. Every title here is fully completed.",
+    novels: [
+      { name: "The Wandering Inn",        author: "pirateaba",     tag: "Portal Fantasy" },
+      { name: "Worm",                     author: "Wildbow",       tag: "Superhero"      },
+      { name: "Practical Guide to Evil",  author: "ErraticErrata", tag: "Dark Fantasy"   },
+      { name: "Ward",                     author: "Wildbow",       tag: "Superhero"      },
+      { name: "Pact",                     author: "Wildbow",       tag: "Urban Fantasy"  },
+    ]
+  },
+  {
+    id: 5, editor: false,
+    title: "Slow Burn Romance in Cultivation",
+    creator: "CloudNineReads", initials: "CN",
+    books: 11, views: "6.3K", saves: 134,
+    desc: "Cultivation stories with beautiful romantic subplots — no forced pairings.",
+    novels: [
+      { name: "Heaven Official's Blessing",           author: "MXTX",         tag: "Cultivation" },
+      { name: "Scum Villain's Self-Saving System",    author: "MXTX",         tag: "BL"          },
+      { name: "Grandmaster of Demonic Cultivation",   author: "MXTX",         tag: "BL"          },
+      { name: "To Be a Power in the Shadows",         author: "Aizawa Daisuke",tag: "Comedy"     },
+      { name: "Reborn as a Vending Machine",          author: "Hiru Kuma",    tag: "Isekai"      },
+    ]
+  },
+];
+
+const likedIds = new Set();
+
+function showToast(msg, type = 'secondary') {
+  const id = 'toast_' + Date.now();
+  document.getElementById('toastContainer').insertAdjacentHTML('beforeend', `
+    <div id="${id}" class="toast align-items-center text-bg-${type} border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body">${msg}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>`);
+  new bootstrap.Toast(document.getElementById(id), { delay: 2000 }).show();
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-bs-theme') === 'dark';
+  html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').textContent = isDark ? 'dark_mode' : 'light_mode';
+  localStorage.setItem('nn-theme', isDark ? 'light' : 'dark');
+}
+
+function restoreTheme() {
+  const saved = localStorage.getItem('nn-theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-bs-theme', saved);
+    const icon = document.getElementById('themeIcon');
+    if (icon) icon.textContent = saved === 'dark' ? 'light_mode' : 'dark_mode';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  restoreTheme();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('community-lists').innerHTML = DATA.map(d => buildCard(d, false)).join('');
+});
+
+function novelRows(novels, count) {
+  return novels.slice(0, count).map((n, i) => `
+    <div class="novel-row d-flex align-items-center gap-2 px-2 py-1 rounded small">
+      <span class="text-muted" style="width:18px">${i + 1}</span>
+      <div class="flex-grow-1 overflow-hidden">
+        <div class="fw-medium text-truncate">${n.name}</div>
+        <div class="text-muted" style="font-size:.75rem">${n.author}</div>
+      </div>
+      <span class="badge bg-success-subtle text-success fw-normal">${n.tag}</span>
+    </div>`).join('');
+}
+
+function buildCard(d, isRight) {
+  const isLiked = likedIds.has(d.id);
+  const count = isRight ? 3 : 5;
+  return `
+    <div class="card mb-3 shadow-sm" id="card-${isRight ? 'r' : 'l'}-${d.id}">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+          <div class="flex-grow-1 overflow-hidden">
+            ${d.editor ? '<span class="badge text-bg-success mb-1">Editor\'s Choice</span><br>' : ''}
+            <a href="#" class="fw-semibold text-dark text-decoration-none text-truncate d-block">${d.title}</a>
+          </div>
+          <div class="text-end flex-shrink-0">
+            <div class="fw-medium text-warning-emphasis small">${d.creator}</div>
+            <div class="text-muted d-flex gap-2 justify-content-end" style="font-size:.75rem">
+              <span>${d.books} books</span>
+              <span>${d.views} views</span>
+              <span>${d.saves} saves</span>
+            </div>
+          </div>
+        </div>
+
+        ${!isRight ? `<p class="text-muted small mb-2">${d.desc}</p>` : ''}
+
+        <div class="d-flex flex-column gap-1 mb-3">${novelRows(d.novels, count)}</div>
+
+        <div class="d-flex gap-2 border-top pt-2">
+          <button class="btn btn-sm btn-outline-secondary btn-like ${isLiked ? 'active' : ''}"
+                  onclick="toggleLike(${d.id})">
+            ${isLiked ? 'Liked' : 'Like'}
+          </button>
+          <button class="btn btn-sm btn-outline-secondary btn-follow"
+                  onclick="toggleFollow(this, '${d.creator}')">
+            Follow ${d.creator}
+          </button>
+        </div>
+
+      </div>
+    </div>`;
+}
+
+function toggleFollow(btn, creator) {
+  const active = btn.classList.toggle('active');
+  btn.classList.toggle('btn-outline-secondary', !active);
+  btn.classList.toggle('btn-secondary', active);
+  btn.textContent = active ? `Following ${creator}` : `Follow ${creator}`;
+  showToast(active ? `Now following ${creator}` : `Unfollowed ${creator}`);
+}
+
+function toggleLike(id) {
+  const d = DATA.find(x => x.id === id);
+  const likedEl = document.getElementById('liked-lists');
+  const emptyEl = document.getElementById('empty-liked');
+
+  if (likedIds.has(id)) {
+    likedIds.delete(id);
+    const rc = document.getElementById(`card-r-${id}`);
+    if (rc) rc.remove();
+    if (likedIds.size === 0 && emptyEl) emptyEl.style.display = '';
+
+    const lc = document.getElementById(`card-l-${id}`);
+    if (lc) {
+      const btn = lc.querySelector('.btn-like');
+      btn.classList.remove('active');
+      btn.textContent = 'Like';
+    }
+    showToast('Removed from liked lists');
+  } else {
+    likedIds.add(id);
+    if (emptyEl) emptyEl.style.display = 'none';
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = buildCard(d, true);
+    const inner = wrap.firstElementChild;
+    inner.classList.add('card-enter');
+    likedEl.appendChild(inner);
+
+    const lc = document.getElementById(`card-l-${id}`);
+    if (lc) {
+      const btn = lc.querySelector('.btn-like');
+      btn.classList.add('active');
+      btn.textContent = 'Liked';
+    }
+    showToast(`"${d.title}" saved to your liked lists`);
+  }
+}
+
+</script>
+</body>
+</html>
