@@ -7,6 +7,42 @@ Currently, the landscape of internet novels (web fiction, serialized online stor
  - **Backend:** Node.js, Express
  - **Database:** MongoDB
 
+### Database Schema
+**Database**: 'novel_db'
+**Type**: MongoDB
+**Collections**: 2
+
+#### Collection 1: NOVEL
+Stores web novel metadata and content information.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | ObjectId | MongoDB auto-generated primary key |
+| `id` | Number | Custom novel ID (901, 902, etc.) |
+| `book_name` | String | Novel title |
+| `author` | String | Author name |
+| `genre` | String | Primary genre (e.g., "Fanfiction", "Romance") |
+| `source_url` | String | External link to novel source |
+| `description` | String | Plot summary or synopsis |
+| `read` | Number | Read count for ranking |
+| `tag1` | String | Primary tag/trope |
+| `tag2` | String | Secondary tag |
+| `tag3` | String | Tertiary tag |
+| `cover_url` | String | Novel cover image URL |
+| `status` | String | Completion status ("completed", "ongoing", etc.) |
+
+#### Collection 2: REVIEW
+Stores user reviews and ratings for novels.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `_id` | ObjectId | MongoDB auto-generated primary key |
+| `novelId` | Number | Reference to NOVEL.id (foreign key) |
+| `username` | String | Reviewer name |
+| `rating` | Number | Star rating (1-5 scale) |
+| `body` | String | Review text content |
+| `createdAt` | String | Review date (MM/DD/YYYY format) |
+
 ### Core Features
  - Browse Novels: A homepage to browse all novels by category
  - Novel Rank: Ranked category by readings
