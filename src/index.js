@@ -34,7 +34,5 @@ app.use("/api/novels", novelRouter);
 app.use("/api", reviewRouter);
 
 // ✅ 关键修改：导出 handler 函数，而不是 app
-export default (req, res) => {
-  return app(req, res);
-};
+export default app;
 export { novelCol, reviewCol };
