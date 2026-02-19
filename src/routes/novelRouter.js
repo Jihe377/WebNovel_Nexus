@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ObjectId } from "mongodb";
 import connectDB from "../modules/mongodb-connect.js";
+import { getRecommendations } from "../modules/recommender.js";
 
 const router = Router();
 
@@ -13,33 +14,21 @@ router.get("/", async (req, res) => {
 
     const query = {};
 
-    // Title search (case-insensitive)
     if (search && search.trim()) {
       query.name = { $regex: search.trim(), $options: "i" };
     }
 
-    // Include tags filter
     if (tags && tags.trim()) {
-      const includeTags = tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean);
+      const includeTags = tags.split(",").map((t) => t.trim()).filter(Boolean);
       if (includeTags.length > 0) {
         query.tags = { $all: includeTags };
       }
     }
 
-    // Exclude tags filter
     if (exclude && exclude.trim()) {
-      const excludeTags = exclude
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean);
+      const excludeTags = exclude.split(",").map((t) => t.trim()).filter(Boolean);
       if (excludeTags.length > 0) {
-        query.tags = {
-          ...(query.tags || {}),
-          $nin: excludeTags,
-        };
+        query.tags = { ...(query.tags || {}), $nin: excludeTags };
       }
     }
 
@@ -62,18 +51,42 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET /api/novels/:id/recommendations
+// MUST be before /:id to prevent Express matching "recommendations" as an id
+router.get("/:id/recommendations", async (req, res) => {
+  try {
+    const { novelCol } = await connectDB();
+    const { id } = req.params;
+    const numId = parseInt(id);
+
+    const currentNovel = isNaN(numId)
+      ? await novelCol.findOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : null })
+      : await novelCol.findOne({ id: numId });
+
+    if (!currentNovel) {
+      return res.status(404).json({ error: "Novel not found" });
+    }
+
+    const allNovels = await novelCol.find({}).toArray();
+    const recs = getRecommendations(currentNovel, allNovels);
+
+    res.json(recs);
+  } catch (err) {
+    console.error("GET /api/novels/:id/recommendations error:", err);
+    res.status(500).json({ error: "Failed to fetch recommendations" });
+  }
+});
+
 // GET /api/novels/:id
-// Get a single novel by ID
 router.get("/:id", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
     const { id } = req.params;
+    const numId = parseInt(id);
 
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid novel ID" });
-    }
-
-    const novel = await novelCol.findOne({ _id: new ObjectId(id) });
+    const novel = isNaN(numId)
+      ? await novelCol.findOne({ _id: ObjectId.isValid(id) ? new ObjectId(id) : null })
+      : await novelCol.findOne({ id: numId });
 
     if (!novel) {
       return res.status(404).json({ error: "Novel not found" });
@@ -87,14 +100,11 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /api/novels
-// Add a new novel
 router.post("/", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
-    const { name, author, genre, source, description, tags, coverUrl, status } =
-      req.body;
+    const { name, author, genre, source, description, tags, coverUrl, status } = req.body;
 
-    // Required field validation
     if (!name || !name.trim())
       return res.status(400).json({ error: "Title is required" });
     if (!author || !author.trim())
@@ -106,7 +116,6 @@ router.post("/", async (req, res) => {
     if (!description || !description.trim())
       return res.status(400).json({ error: "Description is required" });
 
-    // Tags: parse and enforce max 3
     const parsedTags = Array.isArray(tags)
       ? tags.map((t) => t.trim()).filter(Boolean)
       : typeof tags === "string"
@@ -117,17 +126,15 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Maximum 3 tags allowed" });
     }
 
-    // Check for repeat 
     const existing = await novelCol.findOne({
-      name: { $regex: `^${name.trim()}$`, $options: "i" }, 
-      author: { $regex: `^${author.trim()}$`, $options: "i" }
+      name: { $regex: `^${name.trim()}$`, $options: "i" },
+      author: { $regex: `^${author.trim()}$`, $options: "i" },
     });
 
     if (existing) {
       return res.status(409).json({ error: "This novel already exists in the database" });
     }
 
-    // Status: default to Ongoing
     const validStatuses = ["Ongoing", "Completed", "Hiatus"];
     const novelStatus = validStatuses.includes(status) ? status : "Ongoing";
 
@@ -157,7 +164,6 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /api/novels/:id
-// Update novel metadata (only fields provided in request body)
 router.put("/:id", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
@@ -167,8 +173,7 @@ router.put("/:id", async (req, res) => {
       return res.status(400).json({ error: "Invalid novel ID" });
     }
 
-    const { name, author, genre, source, description, tags, coverUrl, status } =
-      req.body;
+    const { name, author, genre, source, description, tags, coverUrl, status } = req.body;
 
     const updates = {};
     if (name !== undefined) updates.name = name.trim();
@@ -223,7 +228,6 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /api/novels/:id
-// Delete a novel and cascade delete its reviews
 router.delete("/:id", async (req, res) => {
   try {
     const { novelCol, reviewCol } = await connectDB();
@@ -239,7 +243,6 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ error: "Novel not found" });
     }
 
-    // Cascade delete all reviews for this novel
     await reviewCol.deleteMany({ novelId: new ObjectId(id) });
 
     res.json({ message: "Novel deleted successfully" });
