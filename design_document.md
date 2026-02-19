@@ -67,25 +67,30 @@ Mei exclusively reads Xianxia, LitRPG, and Progression Fantasy. She's frustrated
 ### Persona 3 — The Community Member (Jordan, 28)
 Jordan loves discussing web fiction with others who actually understand the difference between a "system apocalypse" story and a standard fantasy. They want to create curated reading lists to share with their Discord communities, follow trusted readers with similar tastes, and write reviews that reference tropes without having to explain them from scratch.
  - Goals: Share curated lists, follow other readers, write community-relevant reviews.
- - Pain Points: Existing platforms (Goodreads) have audiences unfamiliar with web fiction conventions; no social layer built around this niche.
+ - Pain Points: Existing platforms (Goodreads) have audiences unfamiliar with web fiction conventions; no social layer has been built around this niche.
 
 ## 3. User Stories
 
-### Story 1 — Adding a Novel (Power Reader)
-Alex is reading a LitRPG on Royal Road that doesn't exist on any mainstream database. They open NovelNest, click "Add Novel," fill out a form with the title, author, source URL, genre tags, and current status. The new novel will add to our novel libary.
-This story exercises: the Add Novel form (at least 1 form requirement), the Novels MongoDB collection, CREATE operation.
+### Filtering by Niche Tags (Niche Seeker)
+ - US1: As a Niche Seeker, I want to filter by web-novel-specific tags, so that I can find exactly what I'm craving.\
+ - US2: As a Niche Seeker, I want to exclude specific tags/tropes from search results so that I can avoid content I dislike.
 
-### Story 2 — Filtering by Niche Tags (Niche Seeker)
-Mei opens  Discover page and selects "Xianxia" and "Cultivation" from the category and tag filter panel, then adds "Harem" to her exclusion list. The page re-renders client-side, showing only novels that match her included tags and contain none of her excluded ones. She finds a highly-rated title she hadn't seen before and adds it to her "Want to Read" list.
-This story exercises: client-side rendering, tag filtering logic, READ operations on the Novels collection.
+### Adding a Novel (Power Reader)
+ - US3: As a Power Reader, I want to manually add novels from any format, so that I can track them in one place.
 
-### Story 3 — Writing a Review (Community Member)
-Jordan finishes a novel and navigates to its detail page. They click "Write Review," fill out a star rating (1–5), a review body using community-recognized terminology ("great face-slapping arc, weak side characters"), and submit. The review appears immediately on the novel's page. Other users can see Jordan's review and upvote it.
-This story exercises: the Reviews MongoDB collection, CREATE + READ operations, at least 1 form.
+### Writing a Review (Community Member)
+ - US4: As a Community Member, I want to write a review of a novel.
+ - US5: As a Community Member, I want to see my review immediately on the novel's page once I have submitted my review.
 
-### Story 4 — Getting Personalized Recommendations (Niche Seeker)
-Mei navigates to her Recommendations page. NovelNest analyzes her bookshelf tags — the genres and tropes of novels she rated 4–5 stars — and surfaces the top 5 novels in the database that share the most tag overlap.
-This story exercises: recommendation algorithm (tag-overlap scoring), READ across the Novels collection, UPDATE on user preference data.
+### Recommendations (Niche Seeker)
+ - US6: As a Niche Seeker, I want to see recommended novels based on novels viewed.
+
+### Community Booklist (Community Member)
+ - US7: As a Community Member, I want to follow other users' booklists.
+ - US8: As a Community Member, I want to unfollow other users' booklists.
+
+### Day/Night Mode
+ - US9: As a website user, I want to switch Day and Night mode.
 
 ## 4. Design Mockups
 <img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/ef75d314-2767-4531-a7bb-6fbaf40754a8" />
