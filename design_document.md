@@ -39,8 +39,8 @@ Mei navigates to her Recommendations page. NovelNest analyzes her bookshelf tags
 This story exercises: recommendation algorithm (tag-overlap scoring), READ across the Novels collection, UPDATE on user preference data.
 
 ## 4. Design Mockups
-<img width="1260" height="1596" alt="image" src="https://github.com/user-attachments/assets/ef75d314-2767-4531-a7bb-6fbaf40754a8" />
-<img width="1260" height="1596" alt="image" src="https://github.com/user-attachments/assets/b06c70bc-939c-438e-a587-7bb9900ee644" />
-<img width="1260" height="1596" alt="image" src="https://github.com/user-attachments/assets/6d60c113-0ca2-4ecc-bcb5-e93d3347bbe5" />
+<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/ef75d314-2767-4531-a7bb-6fbaf40754a8" />
+<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/b06c70bc-939c-438e-a587-7bb9900ee644" />
+<img width="420" height="532" alt="image" src="https://github.com/user-attachments/assets/6d60c113-0ca2-4ecc-bcb5-e93d3347bbe5" />
 
 
