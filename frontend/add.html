@@ -136,11 +136,20 @@
           <!-- Tags -->
           <div class="mb-3">
             <label class="form-label fw-semibold small">Tags <span class="text-muted fw-normal">(up to 3)</span></label>
+            
+            <!-- Preset tag buttons -->
+            <div class="d-flex flex-wrap gap-1 mb-2" id="presetTags">
+              <!-- populated by JS -->
+            </div>
+
+            <!-- Custom input -->
             <div class="d-flex gap-2">
-              <input type="text" class="form-control" id="tagInput" placeholder="Type a tag and press Enter or Add"
-                     onkeydown="if(event.key==='Enter'){event.preventDefault();addTag()}"/>
+              <input type="text" class="form-control form-control-sm" id="tagInput"
+                    placeholder="Or type a custom tag…"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault();addTag()}"/>
               <button class="btn btn-outline-secondary btn-sm px-3" type="button" onclick="addTag()">Add</button>
             </div>
+
             <div class="mt-2 d-flex flex-wrap gap-2" id="tagList"></div>
             <div class="form-text text-danger d-none" id="tagError">Maximum 3 tags allowed.</div>
           </div>
@@ -192,9 +201,48 @@
 const API_BASE = '/api';
 const tags = [];
 
+const PRESET_TAGS = [
+  'Rebirth', 'Infinite Flow', 'Apocalypse', 'Interstellar', 'Cultivation',
+  'Strong vs. Strong', 'Arranged Marriage', 'Reconciliation', 'Unrequited Love',
+  'Pursuing Wife Through Fire', 'Satisfying Read', 'Angsty Read', 'Sweet Read',
+  'Suspense', 'Leveling Up', 'Beautiful Strong and Tragic', 'Crazy',
+  'Yandere', 'Cold', 'Loyal Dog',
+];
+
+function buildPresetTags() {
+  const container = document.getElementById('presetTags');
+  PRESET_TAGS.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-outline-secondary btn-sm';
+    btn.textContent = tag;
+    btn.dataset.tag = tag;
+    btn.addEventListener('click', () => togglePresetTag(btn, tag));
+    container.appendChild(btn);
+  });
+}
+
+function togglePresetTag(btn, tag) {
+  if (tags.includes(tag)) {
+    // Deselect
+    tags.splice(tags.indexOf(tag), 1);
+    btn.className = 'btn btn-outline-secondary btn-sm';
+    document.getElementById('tagError').classList.add('d-none');
+  } else {
+    if (tags.length >= 3) {
+      document.getElementById('tagError').classList.remove('d-none');
+      return;
+    }
+    tags.push(tag);
+    btn.className = 'btn btn-primary btn-sm';
+  }
+  renderTags();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   restoreTheme();
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  buildPresetTags();
 });
 
 function addTag() {
@@ -233,6 +281,11 @@ function renderTags() {
         <span class="material-symbols-outlined" style="font-size:16px">close</span>
       </button>
     </span>`).join('');
+  document.querySelectorAll('#presetTags button').forEach(btn => {
+    btn.className = tags.includes(btn.dataset.tag)
+      ? 'btn btn-primary btn-sm'
+      : 'btn btn-outline-secondary btn-sm';
+  });
 }
 
 async function submitNovel() {
