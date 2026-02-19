@@ -33,6 +33,9 @@ connectDB().then(({ novelCol: n, reviewCol: r }) => {
 app.use("/api/novels", novelRouter);
 app.use("/api", reviewRouter);
 
-// 删掉 app.listen，改成 export default
+// ✅ 只保留默认导出，不要混合命名导出
 export default app;
-export { novelCol, reviewCol };
+
+// 如果需要共享数据库连接，通过 app.locals 或其他方式
+app.locals.novelCol = novelCol;
+app.locals.reviewCol = reviewCol;
