@@ -6,16 +6,49 @@ import { getRecommendations } from "../modules/recommender.js";
 const router = Router();
 
 // GET /api/novels
-// Supports ?search=, ?page=, ?limit=
+// Supports ?search=, ?genre=, ?tags=, ?exclude=, ?page=, ?limit=
 router.get("/", async (req, res) => {
   try {
     const { novelCol } = await connectDB();
-    const { search, page = 1, limit = 20 } = req.query;
+    const { search, genre, tags, exclude, page = 1, limit = 20 } = req.query;
 
     const query = {};
 
+    // Title search (case-insensitive)
     if (search && search.trim()) {
       query.book_name = { $regex: search.trim(), $options: "i" };
+    }
+
+    // Genre filter (case-insensitive exact match)
+    if (genre && genre.trim()) {
+      query.genre = { $regex: `^${genre.trim()}$`, $options: "i" };
+    }
+
+    // Include tags — novel must have ALL specified tags in tag1/tag2/tag3
+    if (tags && tags.trim()) {
+      const includeTags = tags.split(",").map(t => t.trim()).filter(Boolean);
+      if (includeTags.length > 0) {
+        query.$and = includeTags.map(t => ({
+          $or: [
+            { tag1: { $regex: `^${t}$`, $options: "i" } },
+            { tag2: { $regex: `^${t}$`, $options: "i" } },
+            { tag3: { $regex: `^${t}$`, $options: "i" } },
+          ]
+        }));
+      }
+    }
+    
+    // Exclude tags — novel must NOT have any of these in tag1/tag2/tag3
+    if (exclude && exclude.trim()) {
+      const excludeTags = exclude.split(",").map(t => t.trim()).filter(Boolean);
+      if (excludeTags.length > 0) {
+        const notConditions = excludeTags.map(t => ({
+          tag1: { $not: { $regex: `^${t}$`, $options: "i" } },
+          tag2: { $not: { $regex: `^${t}$`, $options: "i" } },
+          tag3: { $not: { $regex: `^${t}$`, $options: "i" } },
+        }));
+        query.$and = [...(query.$and || []), ...notConditions];
+      }
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
