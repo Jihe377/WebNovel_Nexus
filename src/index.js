@@ -24,18 +24,10 @@ app.get("/api/health", (req, res) => {
 });
 
 // 连接数据库
-let novelCol, reviewCol;
-connectDB().then(({ novelCol: n, reviewCol: r }) => {
-  novelCol = n;
-  reviewCol = r;
-});
+connectDB();
 
 app.use("/api/novels", novelRouter);
 app.use("/api", reviewRouter);
 
-// ✅ 关键修改：导出 handler 函数，而不是 app
-export default function handler(req, res) {
-  return app(req, res);
-}
-
-export { novelCol, reviewCol };
+// 直接导出 app，Vercel 会将其识别为 server
+export default app;
