@@ -2,12 +2,20 @@
 ## 1. Project Description 
 Currently, the landscape of internet novels (web fiction, serialized online stories, fanfiction) is highly fragmented. Readers consume content across dozens of disparate platforms like Royal Road, Wattpad, AO3, Scribble Hub, and various translation sites. To create a centralized web application that acts as a universal "bookshelf" for internet novels. It will allow users to track what they read regardless of source, gauge community sentiment through ratings, and discover new content through personalized recommendation algorithms. 
 
-## 2. Technical Stack
- - Frontend: Bootstrap, HTML
- - Backend: Node.js, Express
- - Database: MongoDB
+### Technical Stack
+ - **Frontend:** Bootstrap, HTML
+ - **Backend:** Node.js, Express
+ - **Database:** MongoDB
 
-## 3. User Personas
+### Core Features
+ - Browse Novels: A homepage to browse all novels by category
+ - Novel Rank: Ranked category by readings
+ - Novel detail: A novel detail page, where I can see the name, author, category, tags and status of the novels
+ - Recommendation: Based on the novel I selected, I can recommend novels for myself
+ - Tag selection: I can search novels by category and tags
+ - Add Novel: I can add my own novel source
+
+## 2. User Personas
 
 ### Persona 1 — The Power Reader (Alex, 24)
 Individuals who consume a high volume of serialized web content weekly across multiple hosting sites. Alex wants one dashboard that shows all his novels with a direct link to the source.
