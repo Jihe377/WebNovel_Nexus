@@ -33,6 +33,10 @@ A centralized web application for tracking, discovering, and reviewing internet 
 
 ---
 
+## Data Source Notice
+
+**Current Status** The database uses mock data for functional demonstration purposes. Novel URLs are placeholders and do not lead to actual content, though the redirect functionality is fully implemented. The platform is designed as a copyright-compliant indexing engine and does not store any actual novel content.
+
 ## Design Mockup
 <img width="2772" height="2404" alt="image" src="https://github.com/user-attachments/assets/c8c3978c-64fe-400e-83ac-3d2154a88c2b" />
 
