@@ -1,9 +1,3 @@
-# Peer review:
-Overall great job! Here are somethings I noticed from your readme
-1. Missing instructions on how to use app
-2. Missing link to design doc
-
-
 # WebNovel Nexus
 
 A centralized web application for tracking, discovering, and reviewing internet novels (web fiction, serialized stories, fanfiction) across platforms like Royal Road, Wattpad, AO3, and more.
